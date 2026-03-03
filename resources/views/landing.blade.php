@@ -122,8 +122,10 @@
 <body class="bg-white overflow-x-hidden" style="color:#1C0A0A">
 
 <!-- NAVBAR -->
-<nav class="hero-bg sticky top-0 z-50 shadow-lg">
+<header class="relative z-[9999]">
+<nav class="hero-bg sticky top-0 shadow-lg relative z-[9999]">
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow">
         <svg class="w-5 h-5 text-red-700" fill="currentColor" viewBox="0 0 20 20">
@@ -135,6 +137,7 @@
         <p class="text-[10px] leading-none mt-0.5" style="color:rgba(255,255,255,0.5)">Portal Lapor Fasilitas</p>
       </div>
     </div>
+
     <div class="hidden md:flex items-center gap-8">
       <a href="#beranda"  class="nav-link text-sm font-medium">Beranda</a>
       <a href="#tentang"  class="nav-link text-sm font-medium">Tentang</a>
@@ -142,16 +145,46 @@
       <a href="#laporan"  class="nav-link text-sm font-medium">Laporan</a>
       <a href="#faq"      class="nav-link text-sm font-medium">FAQ</a>
     </div>
-    <div class="flex items-center gap-3">
-      <br>
-      <button class="flex items-center gap-2">
-    <div class="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center text-sm">
-        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+
+    <div class="flex items-center gap-4 relative z-[9999]">
+
+    @auth
+        <span class="text-white text-sm">
+            Halo, {{ auth()->user()->name }}
+        </span>
+
+        @if(auth()->user()->role === 'admin')
+            <a href="{{ route('admin.dashboard') }}"
+               class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
+               Dashboard
+            </a>
+        @else
+            <a href="{{ route('dashboard') }}"
+               class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
+               Dashboard
+            </a>
+        @endif
+
+        <form action="{{ route('logout') }}" method="POST" class="inline">
+            @csrf
+            <button type="submit"
+                class="bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-800 transition">
+                Logout
+            </button>
+        </form>
+
+    @else
+    <a href="{{ route('login') }}"
+       class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
+       Login
+    </a>
+@endauth
+
     </div>
-</button>
-    </div>
+
   </div>
 </nav>
+</header>
 
 <!-- HERO -->
 <section id="beranda" class="hero-bg flex items-center relative" style="min-height:88vh">
@@ -323,61 +356,136 @@
     </div>
     <!-- Form white card -->
     <div class="bg-white rounded-3xl shadow-2xl p-8">
-      <h3 class="font-heading text-2xl font-bold text-red-800 mb-6">Form Laporan Fasilitas</h3>
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Nama Pelapor</label>
-            <input type="text" placeholder="Nama lengkap..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none" style="focus:border-color:#B91C1C">
-          </div>
-          <div>
-            <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Kelas / Jabatan</label>
-            <input type="text" placeholder="cth: XII TJAT 1 / Guru" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
-          </div>
-        </div>
-        <div>
-          <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Kategori Fasilitas</label>
-          <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none">
-            <option value="">Pilih kategori...</option>
-            <option>Ruang Kelas</option>
-            <option>Lab Komputer / TKJ</option>
-            <option>Listrik & Air</option>
-            <option>Toilet / Sanitasi</option>
-            <option>Kantin</option>
-            <option>Lapangan Olahraga</option>
-            <option>Perabot (Meja/Kursi)</option>
-            <option>Lainnya</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Lokasi Spesifik</label>
-          <input type="text" placeholder="cth: Ruang kelas XII TJAT 2, lantai 3..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
-        </div>
-        <div>
-          <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Deskripsi Kerusakan</label>
-          <textarea rows="3" placeholder="Jelaskan kerusakan yang kamu temukan secara detail..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none resize-none"></textarea>
-        </div>
-        <div>
-          <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">Tingkat Urgensi</label>
-          <div class="flex gap-3">
-            <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
-              <input type="radio" name="urgensi" style="accent-color:#B91C1C"><span class="text-sm text-gray-600">Normal</span>
-            </label>
-            <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
-              <input type="radio" name="urgensi" style="accent-color:#B91C1C"><span class="text-sm text-gray-600">⚡ Darurat</span>
-            </label>
-          </div>
-        </div>
-        <div class="rounded-xl p-4 text-center cursor-pointer hover:border-red-400 transition-colors" style="border:2px dashed #e5e7eb">
-          <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <p class="text-xs text-gray-400">Klik untuk upload foto bukti kerusakan (opsional)</p>
-        </div>
-        <button class="btn-primary w-full py-3.5 rounded-xl text-sm font-bold tracking-wide">
-          🚨 Kirim Laporan Sekarang
-        </button>
+  <h3 class="font-heading text-2xl font-bold text-red-800 mb-6">
+    Form Laporan Fasilitas
+  </h3>
+
+  <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
+  @csrf
+
+  <div class="space-y-4">
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
+          Nama Pelapor
+        </label>
+        <input type="text"
+               value="{{ optional(auth()->user())->name }}"
+               readonly
+               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-100">
+      </div>
+
+      <div>
+        <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
+          Kelas / Jabatan
+        </label>
+        <input type="text"
+               name="kelas_jabatan"
+               placeholder="cth: XII TJAT 1 / Guru"
+               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
       </div>
     </div>
+
+    <!-- KATEGORI (tetap ada seperti desain kamu) -->
+    <div>
+      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
+        Kategori Fasilitas
+      </label>
+@error('facility_id')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+@enderror
+      <select name="facility_id"
+              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none">
+        <option value="">Pilih kategori...</option>
+
+        @forelse($facilities as $facility)
+          <option value="{{ $facility->id }}">
+            {{ $facility->nama_fasilitas }}
+          </option>
+        @empty
+          <option value="">Belum ada data fasilitas</option>
+        @endforelse
+
+      </select>
+    </div>
+
+    <!-- LOKASI -->
+    <div>
+      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
+        Lokasi Spesifik
+      </label>
+@error('location_id')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+@enderror
+      <select name="location_id"
+              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
+
+        <option value="">Pilih lokasi...</option>
+
+        @forelse($locations as $location)
+          <option value="{{ $location->id }}">
+            {{ $location->nama_lokasi }}
+          </option>
+        @empty
+          <option value="">Belum ada data lokasi</option>
+        @endforelse
+
+      </select>
+    </div>
+
+    <!-- DESKRIPSI -->
+    <div>
+      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
+        Deskripsi Kerusakan
+      </label>
+@error('deskripsi')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+@enderror
+      <textarea name="deskripsi"
+                rows="3"
+                placeholder="Jelaskan kerusakan yang kamu temukan secara detail..."
+                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none resize-none"></textarea>
+    </div>
+
+    <!-- URGENSI -->
+    <div>
+      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
+        Tingkat Urgensi
+      </label>
+
+      <div class="flex gap-3">
+        <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
+          <input type="radio" name="urgensi" value="normal" style="accent-color:#B91C1C">
+          <span class="text-sm text-gray-600">Normal</span>
+        </label>
+
+        <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
+          <input type="radio" name="urgensi" value="darurat" style="accent-color:#B91C1C">
+          <span class="text-sm text-gray-600">⚡ Darurat</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- FOTO -->
+    <div class="rounded-xl p-4 text-center cursor-pointer hover:border-red-400 transition-colors"
+         style="border:2px dashed #e5e7eb">
+
+      <input type="file" name="foto" class="w-full text-sm">
+
+      <p class="text-xs text-gray-400">
+        Klik untuk upload foto bukti kerusakan (opsional)
+      </p>
+    </div>
+
+    <button type="submit"
+            class="btn-primary w-full py-3.5 rounded-xl text-sm font-bold tracking-wide">
+      🚨 Kirim Laporan Sekarang
+    </button>
+
   </div>
+  </form>
+</div>
 </section>
 
 <!-- LAPORAN TERBARU -->

@@ -18,17 +18,16 @@ class ReportController extends Controller
 
     // Siswa dashboard
     public function index()
-    {
-        $user = Auth::user();
-        $reports = Report::with(['facility','location'])
-            ->where('user_id', $user->id)
-            ->latest()
-            ->paginate(10);
+{
+    $user = auth()->user();
 
-        $total = $reports->total();
+    $reports = Report::with(['facility','location'])
+        ->where('user_id', $user->id)
+        ->latest()
+        ->paginate(10);
 
-        return view('dashboard', compact('reports', 'total'));
-    }
+    return view('dashboard', compact('reports'));
+}
 
     public function create()
     {

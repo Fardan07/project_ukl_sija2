@@ -11,7 +11,9 @@ use App\Http\Controllers\AuthController;
 |--------------------------------------------------------------------------
 */
 
-Route::view('/', 'landing')->name('landing');
+use App\Http\Controllers\LandingController;
+
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 /*
 |--------------------------------------------------------------------------
@@ -89,4 +91,24 @@ Route::prefix('admin')
 
         Route::post('/laporan/{report}/status', [AdminReportController::class, 'updateStatus'])
             ->name('admin.laporan.updateStatus');
+        
+        Route::delete('/laporan/{report}', [AdminReportController::class, 'destroy'])
+            ->name('admin.laporan.destroy');
+        
+        Route::prefix('admin')
+             ->middleware(['auth', 'role.admin'])
+                ->group(function () {
+
+        Route::get('/locations', [AdminLocationController::class, 'index'])
+         ->name('admin.locations.index');
+
+        Route::post('/locations', [AdminLocationController::class, 'store'])
+        ->name('admin.locations.store');
+
+        Route::put('/locations/{location}', [AdminLocationController::class, 'update'])
+        ->name('admin.locations.update');
+
+        Route::delete('/locations/{location}', [AdminLocationController::class, 'destroy'])
+        ->name('admin.locations.destroy');
+    });
 });

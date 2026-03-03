@@ -11,9 +11,9 @@ class RoleAdmin
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if (! $user || $user->role !== 'admin') {
-            abort(403, 'Akses dibatasi untuk admin.');
-        }
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
+    abort(403);
+}
 
         return $next($request);
     }

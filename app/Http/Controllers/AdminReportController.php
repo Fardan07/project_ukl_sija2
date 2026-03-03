@@ -14,18 +14,11 @@ class AdminReportController extends Controller
 
     public function dashboard()
     {
-        $total = Report::count();
-        $menunggu = Report::where('status','belum')->count();
-        $proses = Report::where('status','proses')->count();
-        $selesai = Report::where('status','selesai')->count();
+        $reports = Report::with(['user','facility','location'])
+            ->latest()
+            ->paginate(15);
 
-        return view('admin.dashboard', compact('total','menunggu','proses','selesai'));
-    }
-
-    public function index()
-    {
-        $reports = Report::with(['user','facility','location'])->latest()->paginate(15);
-        return view('admin.laporan.index', compact('reports'));
+        return view('admin.dashboard', compact('reports'));
     }
 
     public function updateStatus(Request $request, Report $report)
@@ -41,4 +34,11 @@ class AdminReportController extends Controller
 
         return redirect()->back()->with('success', 'Status laporan diupdate.');
     }
+
+public function destroy(Report $report)
+{
+    $report->delete();
+    return redirect()->back()->with('success', 'Laporan berhasil dihapus.');
+}
+
 }
