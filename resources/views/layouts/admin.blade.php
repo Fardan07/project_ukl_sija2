@@ -20,7 +20,7 @@
 
         <div class="p-6 border-b">
             <h2 class="text-lg font-bold text-gray-800">Admin Panel</h2>
-            <p class="text-xs text-gray-400">SMK Telkom</p>
+            <p class="text-xs text-gray-400">FacSchool Report</p>
         </div>
 
         <nav class="flex-1 p-4 space-y-2 text-sm">

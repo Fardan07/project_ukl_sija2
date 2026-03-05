@@ -41,4 +41,11 @@ public function destroy(Report $report)
     return redirect()->back()->with('success', 'Laporan berhasil dihapus.');
 }
 
+public function show(Report $report)
+{
+    $report->load(['user','facility','location']);
+
+    return view('admin.laporan.show', compact('report'));
+}
+
 }

@@ -53,14 +53,9 @@
   <div class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-2xl font-bold text-gray-800">Data Semua Laporan</h1>
-      <p class="text-sm text-gray-400 mt-0.5">SMK Telkom — Panel Admin</p>
+      <p class="text-sm text-gray-400 mt-0.5">FacSchool Report — Panel Admin</p>
     </div>
-
-    <a href="{{ route('laporan.create') }}"
-       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white"
-       style="background:#B91C1C">
-       Tambah Laporan
-    </a>
+  
   </div>
 
   <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -98,6 +93,15 @@
             </td>
             <td>{{ $report->created_at->format('d M Y') }}</td>
             <td class="flex gap-1">
+
+              <div class="flex items-center gap-1.5">
+
+              <a href="{{ route('admin.laporan.show',$report->id) }}"
+                class="btn-action"
+               style="background:#F3F4F6;color:#374151">
+              View
+              </a>
+
               <form action="{{ route('admin.laporan.updateStatus',$report->id) }}" method="POST">
                 @csrf
                 <input type="hidden" name="status" value="proses">

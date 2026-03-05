@@ -110,5 +110,8 @@ Route::prefix('admin')
 
         Route::delete('/locations/{location}', [AdminLocationController::class, 'destroy'])
         ->name('admin.locations.destroy');
+
+        Route::get('/laporan/{report}', [AdminReportController::class, 'show'])
+        ->name('admin.laporan.show');
     });
 });

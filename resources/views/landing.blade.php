@@ -488,66 +488,6 @@
 </div>
 </section>
 
-<!-- LAPORAN TERBARU -->
-<section id="laporan" class="py-24 bg-white">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="flex items-end justify-between mb-12">
-      <div>
-        <span class="section-label mb-3">Transparansi</span>
-        <h2 class="font-heading text-4xl font-bold" style="color:#B91C1C">Laporan Fasilitas<br/>Terkini</h2>
-      </div>
-      <a href="#" class="font-medium text-sm flex items-center gap-1 transition-colors" style="color:#B91C1C">
-        Lihat Semua
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white border border-gray-100 rounded-3xl overflow-hidden card-hover shadow-sm">
-        <div class="h-36 flex items-center justify-center" style="background:#FFF5F5">
-          <svg class="w-14 h-14" style="color:#FECACA" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-3">
-            <span class="badge text-xs px-3 py-1 rounded-full font-medium">Lab TKJ</span>
-            <span class="status-progress text-xs px-3 py-1 rounded-full font-medium">Diproses</span>
-          </div>
-          <h3 class="font-semibold text-red-800 mb-1">5 PC Lab TKJ 1 Rusak</h3>
-          <p class="text-gray-400 text-xs mb-2">Dilaporkan oleh: Siswa XII TKJ 1</p>
-          <p class="text-gray-400 text-xs">25 Feb 2025 · 09:14</p>
-        </div>
-      </div>
-      <div class="bg-white border border-gray-100 rounded-3xl overflow-hidden card-hover shadow-sm">
-        <div class="h-36 flex items-center justify-center bg-yellow-50">
-          <svg class="w-14 h-14 text-yellow-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-3">
-            <span class="badge text-xs px-3 py-1 rounded-full font-medium">Listrik</span>
-            <span class="status-done text-xs px-3 py-1 rounded-full font-medium">✓ Selesai</span>
-          </div>
-          <h3 class="font-semibold text-red-800 mb-1">Lampu Koridor Lantai 2 Mati</h3>
-          <p class="text-gray-400 text-xs mb-2">Dilaporkan oleh: Guru Pak Andi</p>
-          <p class="text-gray-400 text-xs">22 Feb 2025 · 13:40</p>
-        </div>
-      </div>
-      <div class="bg-white border border-gray-100 rounded-3xl overflow-hidden card-hover shadow-sm">
-        <div class="h-36 flex items-center justify-center bg-blue-50">
-          <svg class="w-14 h-14 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5m4 0H9"/></svg>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-3">
-            <span class="badge text-xs px-3 py-1 rounded-full font-medium">Toilet</span>
-            <span class="status-open text-xs px-3 py-1 rounded-full font-medium">Baru Masuk</span>
-          </div>
-          <h3 class="font-semibold text-red-800 mb-1">Kran Toilet Lantai 1 Bocor</h3>
-          <p class="text-gray-400 text-xs mb-2">Dilaporkan oleh: Anonim</p>
-          <p class="text-gray-400 text-xs">27 Feb 2025 · 07:55</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA BANNER -->
 <section class="py-24 hero-bg relative overflow-hidden">
   <div class="absolute inset-0 dot-pattern"></div>
@@ -566,6 +506,7 @@
     </div>
   </div>
 </section>
+
 
 
 <!-- FAQ -->
