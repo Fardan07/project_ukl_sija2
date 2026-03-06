@@ -161,7 +161,7 @@
         @else
             <a href="{{ route('dashboard') }}"
                class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
-               Dashboard
+               Cek Hasil Laporan
             </a>
         @endif
 
@@ -204,10 +204,17 @@
         Temukan kerusakan di ruang kelas, lab, toilet, atau area sekolah? Laporkan sekarang dan pantau progres perbaikannya secara real-time.
       </p>
       <div class="flex flex-wrap gap-4 afu d4">
-        <a href="#form-laporan" class="btn-primary px-7 py-3 rounded-full text-base inline-flex items-center gap-2">
-          Buat Laporan
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-        </a>
+        @auth
+          <a href="{{ route('laporan.create') }}" class="btn-primary px-7 py-3 rounded-full text-base inline-flex items-center gap-2">
+            Buat Laporan
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        @else
+          <a href="{{ route('login') }}" class="btn-primary px-7 py-3 rounded-full text-base inline-flex items-center gap-2">
+            Buat Laporan
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </a>
+        @endauth
         <a href="#laporan" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
       </div>
       <div class="flex flex-wrap gap-4 mt-10 afu d4">
@@ -252,10 +259,17 @@
       <p class="text-gray-600 leading-relaxed mb-8">
         Setiap laporan yang masuk akan langsung diteruskan ke tim sarana-prasarana sekolah dan dapat dipantau statusnya secara real-time hingga selesai diperbaiki.
       </p>
-      <a href="#form-laporan" class="btn-primary px-7 py-3 rounded-full text-sm inline-flex items-center gap-2">
-        Mulai Lapor Sekarang
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
+      @auth
+        <a href="{{ route('laporan.create') }}" class="btn-primary px-7 py-3 rounded-full text-sm inline-flex items-center gap-2">
+          Mulai Lapor Sekarang
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      @else
+        <a href="{{ route('login') }}" class="btn-primary px-7 py-3 rounded-full text-sm inline-flex items-center gap-2">
+          Mulai Lapor Sekarang
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      @endauth
     </div>
   </div>
 </section>
@@ -356,6 +370,7 @@
     </div>
     <!-- Form white card -->
     <div class="bg-white rounded-3xl shadow-2xl p-8">
+  @auth
   <h3 class="font-heading text-2xl font-bold text-red-800 mb-6">
     Form Laporan Fasilitas
   </h3>
@@ -485,6 +500,29 @@
 
   </div>
   </form>
+
+  @else
+    <!-- Tampilan untuk user yang belum login -->
+    <div class="text-center py-12">
+      <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style="background:#FEF2F2">
+        <svg class="w-10 h-10 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+      </div>
+      <h3 class="font-heading text-2xl font-bold text-red-800 mb-4">
+        Login Diperlukan
+      </h3>
+      <p class="text-gray-600 mb-8 leading-relaxed">
+        Silakan login terlebih dahulu untuk membuat laporan kerusakan fasilitas sekolah.
+      </p>
+      <a href="{{ route('login') }}" class="btn-primary px-8 py-3 rounded-full text-sm inline-flex items-center gap-2 mx-auto">
+        Login Sekarang
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  @endauth
 </div>
 </section>
 
@@ -501,7 +539,11 @@
       Jangan diam. Setiap laporan dari kamu membantu menjaga kenyamanan belajar seluruh warga SMK Telkom.
     </p>
     <div class="flex flex-wrap gap-4 justify-center">
-      <a href="#form-laporan" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+      @auth
+        <a href="{{ route('laporan.create') }}" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+      @else
+        <a href="{{ route('login') }}" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+      @endauth
       <a href="#laporan" class="btn-outline px-8 py-4 rounded-full text-base font-medium">Pantau Status Laporan</a>
     </div>
   </div>
