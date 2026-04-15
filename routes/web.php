@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/laporan', [ReportController::class, 'index'])
         ->name('laporan.index');
+
+    Route::get('/lialapo', function () {
+        return view('lialapo');
+        })->name('laporan.lialapo');
 });
 
 /*
