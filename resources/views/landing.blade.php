@@ -208,7 +208,7 @@
           Buat Laporan
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
-        <a href="{{ route('laporan.lialapo') }}" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
+        <a href="{{ route('laporan.index') }}" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
       </div>
       <div class="flex flex-wrap gap-4 mt-10 afu d4">
           
