@@ -26,7 +26,7 @@ class ReportController extends Controller
         ->latest()
         ->paginate(10);
 
-    return view('dashboard', compact('reports'));
+    return view('lialapo', compact('reports'));
 }
 
     public function create()
@@ -58,6 +58,6 @@ class ReportController extends Controller
 
         Report::create($data);
 
-        return redirect()->route('dashboard')->with('success', 'Laporan berhasil dibuat.');
+        return redirect('/laporan')->with('success', 'Laporan berhasil dibuat.');
     }
 }
