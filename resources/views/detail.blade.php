@@ -73,6 +73,34 @@ body{
     width: 300px;
     height:100px;
 }
+
+.deskripsi {
+    margin-top: -5px;
+    background: #EDE9E6;
+    width: 700px;
+    height:100px;
+    border-radius:5px;
+}
+.deskripsi h4{
+    margin-left:10px; 
+}
+
+.picture {
+    margin-top:-15px;
+    width: 425px;
+    height:200px;
+    border-radius:5px;
+    object-fit: cover;
+}
+
+.informasi{
+    background: #EDE9E6;
+    width: 265px;
+    height:200px;
+    border-radius:5px;
+    margin-left:435px;
+    margin-top:-205px;
+}
     </style>
 </head>
 <body>
@@ -85,7 +113,16 @@ body{
         <!--kolom buat data detail-->
         <div class="kotak-data">
             <h2>AC di kelas ga dingin</h2>
-        </div>
+
+            <div class="deskripsi">
+                <p>Deskripsi Kerusakan:</p>
+            </div>
+
+            <h3 class="foto">Foto Laporan</h3>
+            <img src="https://i.pinimg.com/736x/a7/9f/f1/a79ff10ace0ff5427d81f36707403add.jpg" class="picture">
+
+            <div class="informasi"></div>
+            </div>
 
         <div class="info">
         </div>
