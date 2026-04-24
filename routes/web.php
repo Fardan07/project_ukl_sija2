@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\AdminLocationController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -71,6 +72,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/laporan', [ReportController::class, 'index'])
         ->name('laporan.index');
+
+    Route::get('/detail', function () {
+    return view('detail');});
 });
 
 /*
@@ -94,10 +98,7 @@ Route::prefix('admin')
         
         Route::delete('/laporan/{report}', [AdminReportController::class, 'destroy'])
             ->name('admin.laporan.destroy');
-        
-        Route::prefix('admin')
-             ->middleware(['auth', 'role.admin'])
-                ->group(function () {
+    
 
         Route::get('/locations', [AdminLocationController::class, 'index'])
          ->name('admin.locations.index');
@@ -114,4 +115,3 @@ Route::prefix('admin')
         Route::get('/laporan/{report}', [AdminReportController::class, 'show'])
         ->name('admin.laporan.show');
     });
-});
