@@ -6,6 +6,15 @@ use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminLocationController;
 use App\Http\Controllers\AuthController;
 
+
+use App\Http\Controllers\AdminCategoryController; // Jangan lupa tambahkan ini di bagian atas file web.php
+
+// Paste ini di dalam group middleware admin
+Route::get('/categories', [AdminCategoryController::class, 'index'])->name('admin.categories.index');
+Route::post('/categories', [AdminCategoryController::class, 'store'])->name('admin.categories.store');
+Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
+Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+
 /*
 |--------------------------------------------------------------------------
 | LANDING
@@ -21,6 +30,11 @@ Route::get('/', [LandingController::class, 'index'])->name('landing');
 | AUTH (LOGIN / REGISTER)
 |--------------------------------------------------------------------------
 */
+
+use App\Http\Controllers\Admin\UserController;
+
+// Tambahkan baris ini
+Route::resource('admin/users', UserController::class)->names('admin.users');
 
 // Tampilkan halaman
 Route::view('/login', 'auth.login')->name('login');
@@ -98,8 +112,8 @@ Route::prefix('admin')
         
         Route::delete('/laporan/{report}', [AdminReportController::class, 'destroy'])
             ->name('admin.laporan.destroy');
-    
-
+        
+        
         Route::get('/locations', [AdminLocationController::class, 'index'])
          ->name('admin.locations.index');
 

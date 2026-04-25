@@ -11,9 +11,10 @@ class Report extends Model
 
     protected $fillable = [
         'user_id',
-        'facility_id',
+        'facility_id', // Ini akan otomatis kita isi pakai ID dari Kategori
         'location_id',
         'deskripsi',
+        'urgensi',     // Wajib masuk ke sini
         'foto',
         'status',
         'catatan_admin',
@@ -24,9 +25,10 @@ class Report extends Model
         return $this->belongsTo(\App\Models\User::class);
     }
 
+    // RELASI DIARAHKAN KE CATEGORY (Tabel Kategori Baru)
     public function facility()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo(Category::class, 'facility_id');
     }
 
     public function location()

@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\Location;
-use App\Models\Facility;
+use App\Models\Category; // Memanggil model Category
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class ReportController extends Controller
 {
@@ -18,46 +17,53 @@ class ReportController extends Controller
 
     // Siswa dashboard
     public function index()
-{
-    $user = auth()->user();
+    {
+        $user = auth()->user();
 
-    $reports = Report::with(['facility','location'])
-        ->where('user_id', $user->id)
-        ->latest()
-        ->paginate(10);
+        $reports = Report::with(['facility', 'location'])
+            ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(10);
 
-    return view('lialapo', compact('reports'));
-}
+        return view('lialapo', compact('reports'));
+    }
 
     public function create()
     {
         $locations = Location::orderBy('nama_lokasi')->get();
-        $facilities = Facility::orderBy('nama_fasilitas')->get();
+        $categories = Category::orderBy('nama_kategori')->get();
 
-        return view('laporan.create', compact('locations','facilities'));
+        return view('laporan.create', compact('locations', 'categories'));
     }
 
     public function store(Request $request)
     {
+        // 1. Validasi Data
         $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'facility_id' => 'required|exists:facilities,id',
-            'deskripsi' => 'required|string',
-            'foto' => 'nullable|image|max:4096',
+            'category_id' => 'required|exists:categories,id', // Harus cocok dengan nama Kategori
+            'deskripsi'   => 'required|string',
+            'urgensi'     => 'required|in:normal,darurat',
+            'foto'        => 'nullable|image|max:4096',
         ]);
 
-        $data = $request->only(['location_id','facility_id','deskripsi']);
-        $data['user_id'] = Auth::id();
+        // 2. Mapping & Simpan Data
+        $report = new Report();
+        $report->location_id = $request->location_id;
+        $report->facility_id = $request->category_id; // Masukkan category_id ke kolom facility_id database
+        $report->deskripsi   = $request->deskripsi;
+        $report->urgensi     = $request->urgensi;
+        $report->user_id     = Auth::id();
+        $report->status      = 'belum';
 
+        // 3. Simpan Foto Jika Ada
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('reports', 'public');
-            $data['foto'] = $path;
+            $report->foto = $request->file('foto')->store('reports', 'public');
         }
 
-        $data['status'] = 'belum';
+        $report->save();
 
-        Report::create($data);
-
-        return redirect('/laporan')->with('success', 'Laporan berhasil dibuat.');
+        // 4. Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Laporan berhasil dikirim! Tim kami akan segera menindaklanjuti.');
     }
 }

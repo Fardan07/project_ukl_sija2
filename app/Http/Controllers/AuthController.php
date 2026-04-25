@@ -14,30 +14,21 @@ class AuthController extends Controller
     // =====================
     public function register(Request $request)
     {
+        // Validasi disederhanakan tanpa milih role dan no_guru
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
-            'role' => 'required|in:siswa,guru,admin',
-
-            'no_guru' => [
-                'nullable',
-                function ($attribute, $value, $fail) use ($request) {
-                    if (in_array($request->role, ['guru','admin']) && empty($value)) {
-                        $fail('Nomor Induk wajib diisi untuk Guru dan Admin.');
-                    }
-                }
-            ],
         ]);
 
+        // Simpan langsung sebagai siswa (position_id 3)
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'no_guru' => in_array($request->role, ['guru','admin'])
-                            ? $request->no_guru
-                            : null,
+            'role' => 'siswa',        // Default role di set ke siswa
+            'position_id' => 3,       // Default ID Jabatan Siswa
+            'no_guru' => null,        // Siswa tidak punya nomor induk
         ]);
 
         return redirect()->route('login')->with('success','Akun berhasil dibuat!');
@@ -47,26 +38,26 @@ class AuthController extends Controller
     // LOGIN
     // =====================
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            if (auth()->user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('landing');
         }
 
-        return redirect()->route('landing');
+        return back()->withErrors([
+            'email' => 'Email atau password salah',
+        ]);
     }
-
-    return back()->withErrors([
-        'email' => 'Email atau password salah',
-    ]);
-}
 
     // =====================
     // LOGOUT

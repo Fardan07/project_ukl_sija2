@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,11 +119,10 @@
   details summary { list-style: none; }
 </style>
 </head>
-<body class="bg-white overflow-x-hidden" style="color:#1C0A0A">
+<body class="bg-white overflow-x-clip" style="color:#1C0A0A">
 
-<!-- NAVBAR -->
-<header class="relative z-[9999]">
-<nav class="hero-bg sticky top-0 shadow-lg relative z-[9999]">
+<header class="sticky top-0 z-[9999]">
+<nav class="hero-bg shadow-lg border-b border-white/10">
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
     <div class="flex items-center gap-3">
@@ -142,7 +141,7 @@
       <a href="#beranda"  class="nav-link text-sm font-medium">Beranda</a>
       <a href="#tentang"  class="nav-link text-sm font-medium">Tentang</a>
       <a href="#kategori" class="nav-link text-sm font-medium">Kategori</a>
-      <a href="#laporan"  class="nav-link text-sm font-medium">Laporan</a>
+      <a href="#form-laporan" class="nav-link text-sm font-medium">Laporan</a>
       <a href="#faq"      class="nav-link text-sm font-medium">FAQ</a>
     </div>
 
@@ -186,7 +185,6 @@
 </nav>
 </header>
 
-<!-- HERO -->
 <section id="beranda" class="hero-bg flex items-center relative" style="min-height:88vh">
   <div class="absolute inset-0 dot-pattern pointer-events-none"></div>
   <div class="max-w-7xl mx-auto px-6 py-20 w-full grid gap-14 items-center relative z-10" style="grid-template-columns:1fr 1fr">
@@ -205,7 +203,7 @@
       </p>
       <div class="flex flex-wrap gap-4 afu d4">
         @auth
-          <a href="{{ route('laporan.create') }}" class="btn-primary px-7 py-3 rounded-full text-base inline-flex items-center gap-2">
+          <a href="#form-laporan" class="btn-primary px-7 py-3 rounded-full text-base inline-flex items-center gap-2">
             Buat Laporan
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
@@ -215,7 +213,7 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </a>
         @endauth
-        <a href="#laporan" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
+        <a href="#form-laporan" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
       </div>
       <div class="flex flex-wrap gap-4 mt-10 afu d4">
           
@@ -225,7 +223,6 @@
     </div>
 </section>
 
-<!-- TENTANG -->
 <section id="tentang" class="py-24 bg-white">
   <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
     <div class="grid grid-cols-2 gap-4">
@@ -260,7 +257,7 @@
         Setiap laporan yang masuk akan langsung diteruskan ke tim sarana-prasarana sekolah dan dapat dipantau statusnya secara real-time hingga selesai diperbaiki.
       </p>
       @auth
-        <a href="{{ route('laporan.create') }}" class="btn-primary px-7 py-3 rounded-full text-sm inline-flex items-center gap-2">
+        <a href="#form-laporan" class="btn-primary px-7 py-3 rounded-full text-sm inline-flex items-center gap-2">
           Mulai Lapor Sekarang
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
@@ -274,7 +271,6 @@
   </div>
 </section>
 
-<!-- KATEGORI -->
 <section id="kategori" class="py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-14">
@@ -326,7 +322,6 @@
   </div>
 </section>
 
-<!-- FORM LAPORAN -->
 <section id="form-laporan" class="py-24 hero-bg relative overflow-hidden">
   <div class="absolute inset-0 dot-pattern"></div>
   <div class="absolute top-0 right-0 w-96 h-96 red-blob pointer-events-none"></div>
@@ -368,12 +363,29 @@
         </div>
       </div>
     </div>
-    <!-- Form white card -->
     <div class="bg-white rounded-3xl shadow-2xl p-8">
   @auth
   <h3 class="font-heading text-2xl font-bold text-red-800 mb-6">
     Form Laporan Fasilitas
   </h3>
+
+  @if ($errors->any())
+      <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+          <p class="font-bold mb-1">Ops! Laporan gagal dikirim:</p>
+          <ul class="list-disc pl-5">
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div>
+  @endif
+
+  @if(session('success'))
+      <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm flex items-center gap-3">
+          <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span class="font-bold">{{ session('success') }}</span>
+      </div>
+  @endif
 
   <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
   @csrf
@@ -398,25 +410,22 @@
         <input type="text"
                name="kelas_jabatan"
                placeholder="cth: XII TJAT 1 / Guru"
-               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
+               value="{{ old('kelas_jabatan') }}"
+               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-400">
       </div>
     </div>
 
-    <!-- KATEGORI (tetap ada seperti desain kamu) -->
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
-        Kategori Fasilitas
+        Nama Fasilitas
       </label>
-@error('facility_id')
-    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-@enderror
-      <select name="facility_id"
-              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none">
+      <select name="category_id" required
+              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-red-400">
         <option value="">Pilih kategori...</option>
 
-        @forelse($facilities as $facility)
-          <option value="{{ $facility->id }}">
-            {{ $facility->nama_fasilitas }}
+        @forelse($categories as $kategori)
+          <option value="{{ $kategori->id }}" {{ old('category_id') == $kategori->id ? 'selected' : '' }}>
+            {{ $kategori->nama_kategori }}
           </option>
         @empty
           <option value="">Belum ada data fasilitas</option>
@@ -425,21 +434,17 @@
       </select>
     </div>
 
-    <!-- LOKASI -->
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
         Lokasi Spesifik
       </label>
-@error('location_id')
-    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-@enderror
-      <select name="location_id"
-              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none">
+      <select name="location_id" required
+              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-400">
 
         <option value="">Pilih lokasi...</option>
 
         @forelse($locations as $location)
-          <option value="{{ $location->id }}">
+          <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>
             {{ $location->nama_lokasi }}
           </option>
         @empty
@@ -449,21 +454,16 @@
       </select>
     </div>
 
-    <!-- DESKRIPSI -->
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
         Deskripsi Kerusakan
       </label>
-@error('deskripsi')
-    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-@enderror
-      <textarea name="deskripsi"
+      <textarea name="deskripsi" required
                 rows="3"
                 placeholder="Jelaskan kerusakan yang kamu temukan secara detail..."
-                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none resize-none"></textarea>
+                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-400 resize-none">{{ old('deskripsi') }}</textarea>
     </div>
 
-    <!-- URGENSI -->
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
         Tingkat Urgensi
@@ -471,18 +471,17 @@
 
       <div class="flex gap-3">
         <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
-          <input type="radio" name="urgensi" value="normal" style="accent-color:#B91C1C">
+          <input type="radio" name="urgensi" value="normal" required {{ old('urgensi') == 'normal' ? 'checked' : '' }} style="accent-color:#B91C1C">
           <span class="text-sm text-gray-600">Normal</span>
         </label>
 
         <label class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-red-400 transition-colors">
-          <input type="radio" name="urgensi" value="darurat" style="accent-color:#B91C1C">
+          <input type="radio" name="urgensi" value="darurat" required {{ old('urgensi') == 'darurat' ? 'checked' : '' }} style="accent-color:#B91C1C">
           <span class="text-sm text-gray-600">⚡ Darurat</span>
         </label>
       </div>
     </div>
 
-    <!-- FOTO -->
     <div class="rounded-xl p-4 text-center cursor-pointer hover:border-red-400 transition-colors"
          style="border:2px dashed #e5e7eb">
 
@@ -502,7 +501,6 @@
   </form>
 
   @else
-    <!-- Tampilan untuk user yang belum login -->
     <div class="text-center py-12">
       <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style="background:#FEF2F2">
         <svg class="w-10 h-10 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -526,7 +524,6 @@
 </div>
 </section>
 
-<!-- CTA BANNER -->
 <section class="py-24 hero-bg relative overflow-hidden">
   <div class="absolute inset-0 dot-pattern"></div>
   <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
@@ -540,18 +537,17 @@
     </p>
     <div class="flex flex-wrap gap-4 justify-center">
       @auth
-        <a href="{{ route('laporan.create') }}" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+        <a href="#form-laporan" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
       @else
         <a href="{{ route('login') }}" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
       @endauth
-      <a href="#laporan" class="btn-outline px-8 py-4 rounded-full text-base font-medium">Pantau Status Laporan</a>
+      <a href="#form-laporan" class="btn-outline px-8 py-4 rounded-full text-base font-medium">Pantau Status Laporan</a>
     </div>
   </div>
 </section>
 
 
 
-<!-- FAQ -->
 <section id="faq" class="py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start">
     <div>
@@ -610,7 +606,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="py-14" style="background:#1C0A0A">
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid md:grid-cols-4 gap-10 mb-10">
@@ -648,7 +643,7 @@
       </div>
     </div>
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8" style="border-top:1px solid rgba(255,255,255,0.1)">
-      <p class="text-xs" style="color:rgba(255,255,255,0.25)">© 2025 SMK Telkom. Hak cipta dilindungi.</p>
+      <p class="text-xs" style="color:rgba(255,255,255,0.25)">© 2026 SMK Telkom. Hak cipta dilindungi.</p>
       <div class="flex gap-4">
         <a href="#" class="text-xs transition-colors" style="color:rgba(255,255,255,0.25)">Kebijakan Privasi</a>
         <a href="#" class="text-xs transition-colors" style="color:rgba(255,255,255,0.25)">Syarat & Ketentuan</a>
