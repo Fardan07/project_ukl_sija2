@@ -47,19 +47,32 @@ class AdminReportController extends Controller
         return view('admin.laporan.index', compact('reports'));
     }
 
-    // Fungsi untuk update status (Proses / Selesai)
+    // ==========================================
+    // FUNGSI UPDATE STATUS & BUKTI PERBAIKAN
+    // ==========================================
     public function updateStatus(Request $request, Report $report)
     {
+        // 1. Validasi inputan dari modal form Admin
         $request->validate([
-            'status' => 'required|in:belum,proses,selesai',
-            'catatan_admin' => 'nullable|string',
+            'status'         => 'required|in:belum,proses,selesai',
+            'catatan_admin'  => 'nullable|string',
+            'foto_perbaikan' => 'nullable|image|max:4096', // Maksimal ukuran 4MB
         ]);
 
+        // 2. Masukkan data teks
         $report->status = $request->status;
         $report->catatan_admin = $request->catatan_admin;
+
+        // 3. Jika Admin mengupload foto bukti perbaikan, simpan fotonya
+        if ($request->hasFile('foto_perbaikan')) {
+            $path = $request->file('foto_perbaikan')->store('perbaikan', 'public');
+            $report->foto_perbaikan = $path;
+        }
+
+        // 4. Simpan ke database
         $report->save();
 
-        return redirect()->back()->with('success', 'Status laporan berhasil diupdate.');
+        return redirect()->back()->with('success', 'Status dan info perbaikan berhasil diupdate.');
     }
 
     // Fungsi Hapus (Tetap dibiarkan di controller untuk jaga-jaga, 

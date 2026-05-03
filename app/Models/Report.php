@@ -10,14 +10,15 @@ class Report extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'user_id', 
         'facility_id', // Ini akan otomatis kita isi pakai ID dari Kategori
-        'location_id',
-        'deskripsi',
+        'location_id', // Ini akan otomatis kita isi pakai ID dari Lokasi
+        'deskripsi', 
         'urgensi',     // Wajib masuk ke sini
-        'foto',
-        'status',
-        'catatan_admin',
+        'foto', 
+        'status', 
+        'catatan_admin', 
+        'foto_perbaikan', // Kolom baru untuk menyimpan foto perbaikan
     ];
 
     public function user()
@@ -31,7 +32,7 @@ class Report extends Model
         return $this->belongsTo(Category::class, 'facility_id');
     }
 
-    public function location()
+    public function location() 
     {
         return $this->belongsTo(Location::class);
     }
