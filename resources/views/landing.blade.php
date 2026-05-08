@@ -123,17 +123,17 @@
 
 <header class="sticky top-0 z-[9999]">
 <nav class="hero-bg shadow-lg border-b border-white/10">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
 
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow">
-        <svg class="w-5 h-5 text-red-700" fill="currentColor" viewBox="0 0 20 20">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-xl flex items-center justify-center shadow flex-shrink-0">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-700" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
         </svg>
       </div>
       <div>
-        <p class="font-heading text-white text-base font-bold leading-none">FacSchool Report</p>
-        <p class="text-[10px] leading-none mt-0.5" style="color:rgba(255,255,255,0.5)">Portal Lapor Fasilitas</p>
+        <p class="font-heading text-white text-sm sm:text-base font-bold leading-none">FacSchool Report</p>
+        <p class="text-[9px] sm:text-[10px] leading-none mt-0.5" style="color:rgba(255,255,255,0.5)">Portal Lapor Fasilitas</p>
       </div>
     </div>
 
@@ -145,39 +145,39 @@
       <a href="#faq"      class="nav-link text-sm font-medium">FAQ</a>
     </div>
 
-    <div class="flex items-center gap-4 relative z-[9999]">
+    <div class="flex items-center gap-2 sm:gap-4 relative z-[9999]">
 
     @auth
-        <span class="text-white text-sm">
+        <span class="hidden md:inline-block text-white text-sm">
             Halo, {{ auth()->user()->name }}
         </span>
 
         @if(auth()->user()->role === 'admin')
             <a href="{{ route('admin.dashboard') }}"
-               class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
+               class="bg-white text-red-700 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-100 transition whitespace-nowrap shadow-sm">
                Dashboard
             </a>
         @else
             <a href="{{ route('dashboard') }}"
-               class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
-               Cek Hasil Laporan
+               class="bg-white text-red-700 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-100 transition whitespace-nowrap shadow-sm">
+               Laporan Saya
             </a>
         @endif
 
-        <form action="{{ route('logout') }}" method="POST" class="inline">
+        <form action="{{ route('logout') }}" method="POST" class="inline m-0">
             @csrf
             <button type="submit"
-                class="bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-800 transition">
+                class="bg-red-700 text-white border border-red-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-800 transition whitespace-nowrap shadow-sm">
                 Logout
             </button>
         </form>
 
     @else
-    <a href="{{ route('login') }}"
-       class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition">
-       Login
-    </a>
-@endauth
+        <a href="{{ route('login') }}"
+           class="bg-white text-red-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition whitespace-nowrap shadow-sm">
+           Login
+        </a>
+    @endauth
 
     </div>
 
@@ -187,7 +187,7 @@
 
 <section id="beranda" class="hero-bg flex items-center relative" style="min-height:88vh">
   <div class="absolute inset-0 dot-pattern pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto px-6 py-20 w-full grid gap-14 items-center relative z-10" style="grid-template-columns:1fr 1fr">
+  <div class="max-w-7xl mx-auto px-6 py-20 w-full grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-10">
     <div>
       <div class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 afu d1" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)">
         <div class="w-2 h-2 bg-red-300 rounded-full" style="animation:pulse 2s infinite"></div>
@@ -215,35 +215,34 @@
         @endauth
         <a href="#form-laporan" class="btn-outline px-7 py-3 rounded-full text-base">Lihat Laporan</a>
       </div>
-      <div class="flex flex-wrap gap-4 mt-10 afu d4">
-          
-          </div>
-        </div>
-      </div>
     </div>
+  </div>
 </section>
 
 <section id="tentang" class="py-24 bg-white">
   <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-    <div class="grid grid-cols-2 gap-4">
-      <div class="rounded-3xl p-6 flex flex-col justify-between" style="background:#FEF2F2;aspect-ratio:1">
-        <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      
+      <div class="rounded-3xl p-6 sm:p-8 flex flex-col justify-between min-h-[200px]" style="background:#FEF2F2;">
+        <div class="w-12 h-12 bg-red-100 rounded-2xl flex items-center justify-center mb-4">
           <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
         <div>
-          <p class="font-heading text-3xl font-bold text-red-800">Ada Kerusakan Fasilitas?</p>
-          <p class="text-sm text-gray-500 mt-1">Segera Lapor!</p>
+          <p class="font-heading text-2xl lg:text-3xl font-bold text-red-800">Ada Kerusakan Fasilitas?</p>
+          <p class="text-sm text-gray-500 mt-2">Segera Lapor!</p>
         </div>
       </div>
-      <div class="col-span-2 rounded-3xl p-6 flex items-center gap-4" style="background:#FFF5F5;border:1px solid #FECACA">
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:#B91C1C">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+
+      <div class="sm:col-span-2 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4" style="background:#FFF5F5;border:1px solid #FECACA">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style="background:#B91C1C">
+          <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
         <div>
-          <p class="font-heading text-xl font-bold text-red-800">Respons Cepat</p>
+          <p class="font-heading text-xl sm:text-2xl font-bold text-red-800 mb-1">Respons Cepat</p>
           <p class="text-sm text-gray-500">Tim teknis SMK Telkom merespons setiap laporan dalam 48 jam kerja</p>
         </div>
       </div>
+
     </div>
     <div>
       <span class="section-label mb-3">Tentang Platform</span>
@@ -277,7 +276,7 @@
       <span class="section-label mb-3">Kategori Laporan</span>
       <h2 class="font-heading text-4xl font-bold" style="color:#B91C1C">Jenis Fasilitas<br/>yang Bisa Dilaporkan</h2>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="bg-white rounded-3xl p-6 card-hover border border-gray-100 shadow-sm">
         <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5" style="background:#FEF2F2">
           <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5m4 0H9"/></svg>
@@ -363,14 +362,14 @@
         </div>
       </div>
     </div>
-    <div class="bg-white rounded-3xl shadow-2xl p-8">
+    <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8">
   @auth
   <h3 class="font-heading text-2xl font-bold text-red-800 mb-6">
     Form Laporan Fasilitas
   </h3>
 
   @if ($errors->any())
-      <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+      <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm break-words">
           <p class="font-bold mb-1">Ops! Laporan gagal dikirim:</p>
           <ul class="list-disc pl-5">
               @foreach ($errors->all() as $error)
@@ -392,7 +391,7 @@
 
   <div class="space-y-4">
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
         <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
           Nama Pelapor
@@ -487,13 +486,13 @@
 
       <input type="file" name="foto" class="w-full text-sm">
 
-      <p class="text-xs text-gray-400">
+      <p class="text-xs text-gray-400 mt-2">
         Klik untuk upload foto bukti kerusakan (opsional)
       </p>
     </div>
 
     <button type="submit"
-            class="btn-primary w-full py-3.5 rounded-xl text-sm font-bold tracking-wide">
+            class="btn-primary w-full py-3.5 rounded-xl text-sm font-bold tracking-wide mt-2">
       🚨 Kirim Laporan Sekarang
     </button>
 
@@ -528,25 +527,23 @@
   <div class="absolute inset-0 dot-pattern"></div>
   <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
     <span class="section-label mb-4" style="color:#fca5a5">Ayo Bergerak</span>
-    <h2 class="font-heading text-5xl font-bold text-white mb-6">
+    <h2 class="font-heading text-4xl md:text-5xl font-bold text-white mb-6">
       Temukan Kerusakan?<br/>
       <span style="color:#fca5a5">Langsung Lapor!</span>
     </h2>
-    <p class="text-lg mb-10 max-w-xl mx-auto" style="color:rgba(255,255,255,0.7)">
+    <p class="text-base md:text-lg mb-10 max-w-xl mx-auto" style="color:rgba(255,255,255,0.7)">
       Jangan diam. Setiap laporan dari kamu membantu menjaga kenyamanan belajar seluruh warga SMK Telkom.
     </p>
-    <div class="flex flex-wrap gap-4 justify-center">
+    <div class="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
       @auth
-        <a href="#form-laporan" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+        <a href="#form-laporan" class="btn-primary px-8 py-4 rounded-full text-sm md:text-base font-bold">+ Buat Laporan Sekarang</a>
       @else
-        <a href="{{ route('login') }}" class="btn-primary px-8 py-4 rounded-full text-base font-bold">+ Buat Laporan Sekarang</a>
+        <a href="{{ route('login') }}" class="btn-primary px-8 py-4 rounded-full text-sm md:text-base font-bold">+ Buat Laporan Sekarang</a>
       @endauth
-      <a href="#form-laporan" class="btn-outline px-8 py-4 rounded-full text-base font-medium">Pantau Status Laporan</a>
+      <a href="#form-laporan" class="btn-outline px-8 py-4 rounded-full text-sm md:text-base font-medium">Pantau Status Laporan</a>
     </div>
   </div>
 </section>
-
-
 
 <section id="faq" class="py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start">
@@ -562,7 +559,6 @@
           <p class="font-semibold text-sm text-red-800">Hubungi Sarana Prasarana</p>
           <p class="text-gray-400 text-xs">(021) 555-0123 · sarpras@smktelkom.sch.id</p>
         </div>
-        <button class="ml-auto btn-primary px-4 py-2 rounded-full text-xs">Hubungi</button>
       </div>
     </div>
     <div class="space-y-3">

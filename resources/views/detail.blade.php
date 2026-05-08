@@ -1,134 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Detail Laporan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
-body{
-    background-color: black;
-    font-family: 'Poppins', sans-serif;
-}
-
-.kembali {
-    background: white;
-    border-radius: 12px;
-    margin-top: 40px;
-    margin-left:75px;
-    padding: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    width: fit-content;
-}
-
-.kembali:hover {
-    background: #e5e7eb;
-}
-
-.kembali a{
-    color:black;
-}
-
-    .kembali p {
-        margin: 0;
-        font-size: 18px;
-}
-    .kembali a{
-        text-decoration: none;
-}
-
-.kotak-data {
-    background: white;
-    border-radius: 12px;
-    margin-top: 12px;
-    margin-left:75px;
-    padding: 16px;
-    box-shadow: 0 4px 100px rgba(0,0,0,0.08);
-    width: 700px;
-    height:400px;
-}
-.kotak-data h2{
-    margin-top:0px;
-}
-
-.info {
-    background: white;
-    border-radius: 12px;
-    margin-top: -432.5px;
-    margin-left:850px;
-    padding: 16px;
-    box-shadow: 0 4px 100px rgba(0,0,0,0.08);
-    width: 300px;
-    height:243.5px;
-}
-
-.status {
-    background: white;
-    border-radius: 12px;
-    margin-top: 25px;
-    margin-left:850px;
-    padding: 16px;
-    box-shadow: 0 4px 100px rgba(0,0,0,0.08);
-    width: 300px;
-    height:100px;
-}
-
-.deskripsi {
-    margin-top: -5px;
-    background: #EDE9E6;
-    width: 700px;
-    height:100px;
-    border-radius:5px;
-}
-.deskripsi h4{
-    margin-left:10px; 
-}
-
-.picture {
-    margin-top:-15px;
-    width: 425px;
-    height:200px;
-    border-radius:5px;
-    object-fit: cover;
-}
-
-.informasi{
-    background: #EDE9E6;
-    width: 265px;
-    height:200px;
-    border-radius:5px;
-    margin-left:435px;
-    margin-top:-205px;
-}
+        body { font-family: 'Poppins', sans-serif; background-color: #000; }
     </style>
 </head>
-<body>
+<body class="p-6 md:p-12 text-gray-800">
     
-        <div class="kembali">
-            <a href="/#beranda"><p>Kembali</p>
+    <div class="max-w-6xl mx-auto">
+        <div class="mb-6">
+            <a href="/#beranda" class="inline-block bg-white hover:bg-gray-200 transition-colors px-6 py-3 rounded-xl shadow-lg font-semibold text-lg text-black decoration-none">
+                Kembali
             </a>
         </div>
 
-        <!--kolom buat data detail-->
-        <div class="kotak-data">
-            <h2>AC di kelas ga dingin</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-2xl p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-6 mt-0">AC di kelas ga dingin</h2>
 
-            <div class="deskripsi">
-                <p>Deskripsi Kerusakan:</p>
+                <div class="bg-[#EDE9E6] p-4 rounded-lg mb-6">
+                    <p class="font-semibold text-gray-800 m-0">Deskripsi Kerusakan:</p>
+                </div>
+
+                <h3 class="font-bold text-lg mb-3">Foto Laporan</h3>
+                <img src="https://i.pinimg.com/736x/a7/9f/f1/a79ff10ace0ff5427d81f36707403add.jpg" alt="Foto Laporan" class="w-full max-w-md h-48 md:h-64 object-cover rounded-lg mb-6">
+
+                <div class="bg-[#EDE9E6] h-48 rounded-lg w-full max-w-xs">
+                    </div>
             </div>
 
-            <h3 class="foto">Foto Laporan</h3>
-            <img src="https://i.pinimg.com/736x/a7/9f/f1/a79ff10ace0ff5427d81f36707403add.jpg" class="picture">
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl shadow-2xl p-6 h-48">
+                    <h3 class="font-bold mb-2">Informasi</h3>
+                </div>
 
-            <div class="informasi"></div>
+                <div class="bg-white rounded-xl shadow-2xl p-6 h-32">
+                    <h3 class="font-bold mb-2">Status</h3>
+                </div>
             </div>
 
-        <div class="info">
         </div>
-
-        <div class="status">
-        </div>
+    </div>
 
 </body>
 </html>
