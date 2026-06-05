@@ -402,17 +402,16 @@
                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-100">
       </div>
 
-      <div>
-        <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
-          Kelas / Jabatan
-        </label>
-        <input type="text"
-               name="kelas_jabatan"
-               placeholder="cth: XII TJAT 1 / Guru"
-               value="{{ old('kelas_jabatan') }}"
-               class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-400">
-      </div>
+     <div class="mb-5">
+    <label class="block text-sm font-semibold text-gray-700 mb-2">Kelas</label>
+    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 font-medium">
+        @if(auth()->check() && auth()->user()->class)
+            {{ auth()->user()->class->nama_class }}
+        @else
+            <span class="text-gray-400 italic">Kelas belum diatur</span>
+        @endif
     </div>
+</div>
 
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
@@ -481,14 +480,18 @@
       </div>
     </div>
 
-    <div class="rounded-xl p-4 text-center cursor-pointer hover:border-red-400 transition-colors"
-         style="border:2px dashed #e5e7eb">
+    
+    <div>
+      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
+        Foto Bukti (opsional)
+      </label>
+      <div class="rounded-xl p-4 text-center cursor-pointer hover:border-red-400 transition-colors" style="border:2px dashed #e5e7eb">
+        <input type="file" name="foto" class="w-full text-sm" aria-label="Foto Bukti">
 
-      <input type="file" name="foto" class="w-full text-sm">
-
-      <p class="text-xs text-gray-400 mt-2">
-        Klik untuk upload foto bukti kerusakan (opsional)
-      </p>
+        <p class="text-xs text-gray-400 mt-2">
+          Klik untuk upload foto bukti kerusakan (opsional)
+        </p>
+      </div>
     </div>
 
     <button type="submit"
