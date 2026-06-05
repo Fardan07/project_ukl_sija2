@@ -259,77 +259,62 @@
 </head>
 <body>
 
-<!-- Blobs -->
 <div class="blob-1"></div>
 <div class="blob-2"></div>
 <div class="blob-3"></div>
 <div class="blob-4"></div>
 
-<!-- Card -->
 <div class="card">
 
-  <!-- Logo -->
   <div class="logo-ring">
     <svg width="22" height="22" viewBox="0 0 20 20" fill="#B91C1C">
       <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
     </svg>
   </div>
 
-  <!-- Title -->
   <h1 class="text-center font-heading font-bold text-2xl mb-1" style="color:#111;font-family:'Syne',sans-serif">Login</h1>
   <p class="text-center text-xs text-gray-400 mb-7">Masuk ke portal fasilitas SMK Telkom</p>
 
-  <!-- Form -->
   <form method="POST" action="{{ route('login') }}" class="space-y-4">
   @csrf
 
-    <!-- NISN -->
     <div class="input-group">
       <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
       </svg>
-      <input type="email"
-       name="email"
-       value="{{ old('email') }}"
-       class="field-input"
-       placeholder="Masukkan Email"
-       maxlength="50"
-       required>
+      <input type="text"
+             name="username"
+             value="{{ old('username') }}"
+             class="field-input"
+             placeholder="Username atau Password MyLMS"
+             maxlength="50"
+             required>
     </div>
 
-    <!-- Password -->
     <div class="input-group">
       <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
       </svg>
       <input type="password"
-       name="password"
-       id="passInput"
-       class="field-input"
-       placeholder="Password"
-       style="padding-right:44px"
-       required>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-        </svg>
-      </button>
+             name="password"
+             id="passInput"
+             class="field-input"
+             placeholder="Password"
+             style="padding-right:44px"
+             required>
     </div>
 
-    <!-- Remember -->
     <div class="flex items-center justify-between">
       <label class="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" class="w-4 h-4 rounded" style="accent-color:#B91C1C">
+        <input type="checkbox" name="remember" class="w-4 h-4 rounded" style="accent-color:#B91C1C">
         <span class="text-xs text-gray-500">Ingat saya</span>
       </label>
     </div>
 
-    <!-- Button -->
     <button type="submit" class="btn-red mt-2">Login</button>
 
-    <!-- Divider -->
     <div class="divider">atau</div>
 </form>
-    <!-- Sign Up link -->
     <p class="text-center text-sm text-gray-500">
       Belum punya akun? <a href="{{ route('register') }}" class="link-red">Daftar Sekarang</a>
     </p>

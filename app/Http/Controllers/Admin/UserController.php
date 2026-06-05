@@ -4,26 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\ClassModel; // Pastikan nama model benar
+use App\Models\ClassModel; 
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Imports\UsersImport; 
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil kata kunci dari form pencarian
         $search = $request->search;
 
-        // Ambil data user beserta relasinya, dan filter jika ada pencarian
+        // Ganti ->get() menjadi ->paginate(10) untuk mengaktifkan halaman (10 data per halaman)
         $users = User::with(['class', 'position'])
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
                              ->orWhere('email', 'like', "%{$search}%");
             })
             ->latest()
-            ->get();
+            ->paginate(10) 
+            ->withQueryString(); // Menjaga keyword pencarian tetap aktif saat pindah halaman
 
         $classes = ClassModel::all();
         $positions = Position::all();
@@ -31,7 +33,6 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'classes', 'positions'));
     }
 
-    
     public function store(Request $request)
     {
         $request->validate([
@@ -46,7 +47,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'position_id' => $request->position_id,
-            'class_id' => $request->class_id, // Boleh null kalau guru
+            'class_id' => $request->class_id, 
         ]);
 
         return back()->with('success', 'User berhasil ditambahkan!');
@@ -56,7 +57,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        // Update kolom position_id berdasarkan input dari dropdown
         $user->update([
             'position_id' => $request->position_id
         ]);
@@ -68,5 +68,21 @@ class UserController extends Controller
     {
         $user->delete();
         return back()->with('success', 'User berhasil dihapus!');
+    }
+
+    public function importExcel(Request $request)
+    {
+        set_time_limit(0);
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        try {
+            Excel::import(new UsersImport, $request->file('file'));
+            return back()->with('success', 'Seluruh data akun berhasil diimpor dari Excel!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengimpor file. Periksa format kolom. Detail: ' . $e->getMessage());
+        }
     }
 }

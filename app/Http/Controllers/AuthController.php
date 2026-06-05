@@ -2,71 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    // =====================
-    // REGISTER
-    // =====================
-    public function register(Request $request)
+    public function showLoginForm()
     {
-        // Validasi disederhanakan tanpa milih role dan no_guru
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        // Simpan langsung sebagai siswa (position_id 3)
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'siswa',        // Default role di set ke siswa
-            'position_id' => 3,       // Default ID Jabatan Siswa
-            'no_guru' => null,        // Siswa tidak punya nomor induk
-        ]);
-
-        return redirect()->route('login')->with('success','Akun berhasil dibuat!');
+        return view('auth.login');
     }
 
-    // =====================
-    // LOGIN
-    // =====================
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+        // 1. Validasi input form (menangkap 'username' dari blade)
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $loginInput = $request->input('username');
+        $password = $request->input('password');
 
-            if (auth()->user()->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+        // 2. Trik Utama: Cari user di database lewat kolom 'name' ATAU 'email'
+        // Jadi kalau murid input nama lengkap/username MyLMS-nya, Laravel bisa nemu email aslinya
+        $user = User::where('name', $loginInput)
+                    ->orWhere('email', $loginInput)
+                    ->first();
+
+        // 3. Jika user ditemukan, lakukan proses autentikasi menggunakan EMAIL asli mereka
+        if ($user) {
+            $credentials = [
+                'email'    => $user->email, // Tetap lempar email asli ke Laravel Auth
+                'password' => $password
+            ];
+
+            if (Auth::attempt($credentials, $request->filled('remember'))) {
+                $request->session()->regenerate();
+
+                // Redirect sesuai role masing-masing
+                if ($user->role === 'admin') {
+                    return redirect()->intended('/admin/dashboard')->with('success', 'Selamat datang Admin!');
+                } elseif ($user->role === 'guru') {
+                    return redirect()->intended('/guru/dashboard');
+                } else {
+                    return redirect()->intended('/dashboard'); // Dashboard Murid
+                }
             }
-
-            return redirect()->route('landing');
         }
 
+        // 4. Jika gagal, kembalikan dengan pesan error
         return back()->withErrors([
-            'email' => 'Email atau password salah',
-        ]);
+            'username' => 'Username atau Password MyLMS salah / tidak terdaftar.',
+        ])->withInput($request->only('username', 'remember'));
     }
 
-    // =====================
-    // LOGOUT
-    // =====================
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/login');
     }
 }
