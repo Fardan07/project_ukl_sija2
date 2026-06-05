@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\User;
+use App\Models\ClassModel; // 1. WAJIB TAMBAH INI AGAR MODEL KELAS BISA DIBACA
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Hash;
@@ -19,29 +20,37 @@ class UsersImport implements ToModel, WithHeadingRow
             $cleanRow[$cleanKey] = $value;
         }
 
-        // ... di dalam fungsi model(array $row) ...
+        // Mapping data
+        $nama        = $cleanRow['nama'] ?? $cleanRow['nama_siswa'] ?? null;
+        $usernameLms = $cleanRow['username_mylms'] ?? $cleanRow['username_my_lms'] ?? null;
+        $passwordLms = $cleanRow['password_mylms'] ?? $cleanRow['password_my_lms'] ?? 'Skomda123@';
+        $kelas       = $cleanRow['kelas'] ?? $cleanRow['kelas_baru'] ?? null;
 
-// Mapping data
-$nama        = $cleanRow['nama'] ?? $cleanRow['nama_siswa'] ?? null;
-$usernameLms = $cleanRow['username_mylms'] ?? $cleanRow['username_my_lms'] ?? null;
-$passwordLms = $cleanRow['password_mylms'] ?? $cleanRow['password_my_lms'] ?? 'Skomda123@';
-$kelas       = $cleanRow['kelas'] ?? $cleanRow['kelas_baru'] ?? null;
+        // BERSIHKAN FORMAT .0 DARI EXCEL
+        $usernameClean = str_replace('.0', '', (string)$usernameLms);
 
-// BERSIHKAN FORMAT .0 DARI EXCEL (Baris ini kuncinya!)
-$usernameClean = str_replace('.0', '', (string)$usernameLms);
+        if (empty($nama) || empty($usernameLms)) {
+            return null;
+        }
 
-if (empty($nama) || empty($usernameLms)) {
-    return null;
-}
+        // 2. CARI ATAU BUAT KELAS OTOMATIS DI DATABASE DI SINI
+        $classId = null;
+        if ($kelas) {
+            $kelasData = ClassModel::firstOrCreate(
+                ['nama_class' => trim($kelas)]
+            );
+            $classId = $kelasData->id; // Ambil ID asli dari database tabel classes
+        }
 
-return User::updateOrCreate(
-    ['email' => trim($usernameClean)], // Pakai hasil pembersihan
-    [
-        'name'       => trim((string)$nama),
-        'password'   => Hash::make($passwordLms),
-        'role'       => 'siswa',
-        'class_name' => trim((string)$kelas), // Pastikan class_name ada di $fillable User.php
-    ]
-);
+        return User::updateOrCreate(
+            ['email' => trim($usernameClean)],
+            [
+                'name'       => trim((string)$nama),
+                'password'   => Hash::make($passwordLms),
+                'role'       => 'siswa',
+                'class_name' => trim((string)$kelas), 
+                'class_id'   => $classId, // 3. SEKARANG MENGGUNAKAN $classId HASIL LOOKUP DATABASE
+            ]
+        );
     }
 }

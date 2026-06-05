@@ -21,6 +21,33 @@
                     </label>
                 </form>
 
+                <form action="{{ route('admin.users.deleteAllStudents') }}" method="POST" id="deleteAllForm" class="m-0">
+    @csrf
+    <button type="button" onclick="confirmDelete()" class="px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition active:scale-95 shadow-sm">
+        Hapus Semua Siswa
+    </button>
+</form>
+
+<script>
+    function confirmDelete() {
+        Swal.fire({
+            title: 'Apakah Kamu Yakin?',
+            text: "Semua data siswa akan dihapus permanen dan tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626', // Warna merah (sesuai Tailwind bg-red-600)
+            cancelButtonColor: '#6b7280',  // Warna abu-abu
+            confirmButtonText: 'Ya, Hapus Semua!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Jika user klik tombol "Ya", submit form-nya
+                document.getElementById('deleteAllForm').submit();
+            }
+        });
+    }
+</script>
+
                 <form action="{{ route('admin.users.index') }}" method="GET" class="w-full md:w-80 relative m-0">
                     <input type="text" 
                            name="search" 
@@ -68,7 +95,6 @@
                             <th class="p-4 text-left text-[10px] font-bold uppercase text-gray-400 tracking-widest">Kelas</th>
                             <th class="p-4 text-left text-[10px] font-bold uppercase text-gray-400 tracking-widest">Jabatan Saat Ini</th>
                             <th class="p-4 text-left text-[10px] font-bold uppercase text-gray-400 tracking-widest">Update Role</th>
-                            <th class="p-4 text-center text-[10px] font-bold uppercase text-gray-400 tracking-widest">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -78,20 +104,21 @@
                                 <div class="font-bold text-gray-800">{{ $user->name }}</div>
                                 <div class="text-xs text-gray-400">{{ $user->email }}</div>
                             </td>
-                            <td class="p-4">
-                                <div class="font-semibold text-gray-600 text-xs uppercase tracking-wider">
-                                    {{-- Filter agar hanya memproses tampilan kelas untuk siswa --}}
-                                    @if($user->role === 'siswa')
-                                        @if($user->class_name)
-                                            {{ $user->class_name }}
-                                        @else
-                                            <span class="text-red-500/80 font-medium normal-case italic text-[11px]">Kelas tidak ditemukan</span>
-                                        @endif
-                                    @else
-                                        <span class="text-gray-400 font-normal normal-case italic text-[11px]">Bukan Siswa</span>
-                                    @endif
-                                </div>
-                            </td>
+                            {{-- KODE BARU (SUDAH PAKAI RELASI) --}}
+<td class="p-4">
+    <div class="font-semibold text-gray-600 text-xs uppercase tracking-wider">
+        {{-- Filter agar hanya memproses tampilan kelas untuk siswa --}}
+        @if($user->role === 'siswa')
+            @if($user->class)
+                {{ $user->class->nama_class }}
+            @else
+                <span class="text-red-500/80 font-medium normal-case italic text-[11px]">Kelas tidak ditemukan</span>
+            @endif
+        @else
+            <span class="text-gray-400 font-normal normal-case italic text-[11px]">Bukan Siswa</span>
+        @endif
+    </div>
+</td>
                             <td class="p-4">
                                 {{-- Menampilkan teks role/jabatan langsung --}}
                                 <span class="inline-block px-3 py-1 bg-red-50 text-red-700 rounded-full text-[11px] font-bold uppercase border border-red-100">
@@ -99,34 +126,33 @@
                                 </span>
                             </td>
                             <td class="p-4">
-                                <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="flex gap-2 m-0">
-                                    @csrf
-                                    @method('PUT')
-                                    
-                                    <select name="position_id" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition cursor-pointer">
-                                        @foreach($positions as $p)
-                                            <option value="{{ $p->id }}" {{ $user->position_id == $p->id ? 'selected' : '' }}>
-                                                {{ $p->nama_jabatan }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    
-                                    <button type="submit" class="bg-gray-800 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black transition active:scale-95">
-                                        Simpan
-                                    </button>
-                                </form>
+                               <form action="{{ route('admin.users.update', $user->id) }}" method="POST" class="flex flex-col gap-2 m-0">
+    @csrf
+    @method('PUT')
+    
+    <select name="position_id" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition cursor-pointer" required>
+        <!-- Placeholder "-" -->
+        <option value="" disabled {{ is_null($user->position_id) ? 'selected' : '' }}>-</option>
+        
+        <!-- Daftar Jabatan -->
+        @foreach($positions as $p)
+            <option value="{{ $p->id }}" {{ $user->position_id == $p->id ? 'selected' : '' }}>
+                {{ $p->nama_jabatan }}
+            </option>
+        @endforeach
+    </select>
+
+    <!-- Error message jika user tidak memilih role -->
+    @error('position_id')
+        <span class="text-[10px] text-red-500 font-bold">{{ $message }}</span>
+    @enderror
+    
+    <button type="submit" class="bg-gray-800 text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-black transition active:scale-95">
+        Simpan
+    </button>
+</form>
                             </td>
-                            <td class="p-4 text-center">
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user {{ $user->name }}?')" class="m-0">
-                                    @csrf 
-                                    @method('DELETE')
-                                    <button class="text-gray-300 hover:text-red-600 transition p-2">
-                                        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </td>
+                            
                         </tr>
                         @empty
                         <tr>
@@ -193,6 +219,7 @@
     <script>
         const importForm = document.getElementById('importExcelForm');
         const loadingOverlay = document.getElementById('loadingOverlay');
+        
 
         if (importForm) {
             importForm.addEventListener('submit', function() {
@@ -200,4 +227,6 @@
             });
         }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection

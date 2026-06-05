@@ -54,15 +54,35 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        
-        $user->update([
-            'position_id' => $request->position_id
-        ]);
+{
+    // Validasi: Wajib dipilih dan harus ada di tabel positions
+    $request->validate([
+        'position_id' => 'required|exists:positions,id',
+    ], [
+        'position_id.required' => 'Pilih jabatan/role terlebih dahulu!',
+        'position_id.exists'   => 'Data jabatan tidak valid!',
+    ]);
 
-        return back()->with('success', 'Role ' . $user->name . ' berhasil diperbarui!');
+    $user = User::findOrFail($id);
+    
+    $user->update([
+        'position_id' => $request->position_id
+    ]);
+
+    return back()->with('success', 'Role ' . $user->name . ' berhasil diperbarui!');
+}
+
+    public function deleteAllStudents()
+{
+    try {
+        // Hapus hanya yang ber-role 'siswa'
+        User::where('role', 'siswa')->delete();
+        
+        return back()->with('success', 'Data siswa berhasil dikosongkan. Silakan upload data baru.');
+    } catch (\Exception $e) {
+        return back()->with('error', 'Terjadi kesalahan saat menghapus data.');
     }
+}
 
     public function destroy(User $user)
     {

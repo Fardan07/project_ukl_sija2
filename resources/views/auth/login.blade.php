@@ -72,19 +72,6 @@
     z-index: 0;
   }
 
-  @keyframes morph1 {
-    0%,100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 55%; }
-    50%      { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
-  }
-  @keyframes morph2 {
-    0%,100% { border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%; }
-    50%      { border-radius: 55% 45% 60% 40% / 45% 55% 40% 60%; }
-  }
-  @keyframes morph3 {
-    0%,100% { border-radius: 50% 40% 60% 45% / 45% 60% 40% 55%; transform: rotate(0deg); }
-    50%      { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; transform: rotate(15deg); }
-  }
-
   /* ── Card ── */
   .card {
     position: relative;
@@ -122,44 +109,6 @@
     opacity: 0.15;
   }
   .logo-ring svg { position: relative; z-index: 1; }
-
-  /* ── Input ── */
-  .input-wrap {
-    position: relative;
-    margin-bottom: 16px;
-  }
-  .input-wrap svg {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px; height: 18px;
-    color: #9CA3AF;
-    pointer-events: none;
-    transition: color 0.2s;
-  }
-  .input-wrap input {
-    width: 100%;
-    padding: 13px 14px 13px 42px;
-    border: 1.5px solid #E5E7EB;
-    border-radius: 12px;
-    font-size: 0.875rem;
-    color: #111;
-    background: #FAFAFA;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  }
-  .input-wrap input::placeholder { color: #9CA3AF; }
-  .input-wrap input:focus {
-    border-color: #B91C1C;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(185,28,28,0.08);
-  }
-  .input-wrap input:focus + svg,
-  .input-wrap:focus-within svg { color: #B91C1C; }
-  /* icon after input for focus */
-  .input-wrap .icon { transition: color 0.2s; }
-  .input-wrap input:focus ~ .icon { color: #B91C1C; }
 
   .input-group { position: relative; }
   .input-icon {
@@ -245,16 +194,6 @@
     transition: color 0.2s;
   }
   .link-red:hover { color: #EF4444; }
-
-  .forgot-link {
-    color: #9CA3AF;
-    font-size: 0.8rem;
-    text-decoration: none;
-    transition: color 0.2s;
-    display: block;
-    text-align: center;
-  }
-  .forgot-link:hover { color: #B91C1C; }
 </style>
 </head>
 <body>
@@ -278,17 +217,27 @@
   <form method="POST" action="{{ route('login') }}" class="space-y-4">
   @csrf
 
-    <div class="input-group">
-      <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
-      </svg>
-      <input type="text"
-             name="username"
-             value="{{ old('username') }}"
-             class="field-input"
-             placeholder="Username atau Password MyLMS"
-             maxlength="50"
-             required>
+    <div>
+      <div class="input-group">
+        <svg class="input-icon @error('username') text-red-500 @enderror" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+        </svg>
+        <input type="text"
+               name="username"
+               value="{{ old('username') }}"
+               class="field-input @error('username') border-red-500 focus:border-red-500 focus:ring-red-500/20 @enderror"
+               placeholder="Username atau Password MyLMS"
+               maxlength="50"
+               required>
+      </div>
+      @error('username')
+        <p class="text-red-500 text-[11px] font-semibold mt-1.5 pl-1 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          {{ $message }}
+        </p>
+      @enderror
     </div>
 
     <div class="input-group">
@@ -302,6 +251,13 @@
              placeholder="Password"
              style="padding-right:44px"
              required>
+      
+      <button type="button" id="togglePass" class="eye-btn">
+        <svg id="eyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+      </button>
     </div>
 
     <div class="flex items-center justify-between">
@@ -314,15 +270,30 @@
     <button type="submit" class="btn-red mt-2">Login</button>
 
     <div class="divider">atau</div>
-</form>
-    <p class="text-center text-sm text-gray-500">
-      Belum punya akun? <a href="{{ route('register') }}" class="link-red">Daftar Sekarang</a>
-    </p>
+  </form>
 
-    <p class="text-center text-sm text-gray-500">
-      Kembali ke <a href="{{ route('landing') }}" class="link-red">Halaman</a>
-    </p>
-  </div>
+  <p class="text-center text-sm text-gray-500">
+    Kembali ke <a href="{{ route('landing') }}" class="link-red">Halaman</a>
+  </p>
 </div>
+
+<script>
+  const passInput = document.getElementById('passInput');
+  const togglePass = document.getElementById('togglePass');
+  const eyeIcon = document.getElementById('eyeIcon');
+
+  togglePass.addEventListener('click', () => {
+    if (passInput.type === 'password') {
+      passInput.type = 'text';
+      // Ganti icon ke mata dicoret (eye-off)
+      eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.025 10.025 0 014.132-5.4M9.695 3.515A9.953 9.953 0 0112 3c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.4M9.9 9.9a3 3 0 004.2 4.2m-4.2-4.2l4.2 4.2M3 3l18 18"/>`;
+    } else {
+      passInput.type = 'password';
+      // Kembalikan ke icon mata biasa
+      eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
+    }
+  });
+</script>
+
 </body>
 </html>

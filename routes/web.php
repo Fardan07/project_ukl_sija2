@@ -71,6 +71,7 @@ Route::prefix('admin')
     ->middleware(['auth', 'role.admin'])
     ->group(function () {
 
+        Route::post('/users/delete-all-students', [UserController::class, 'deleteAllStudents'])->name('admin.users.deleteAllStudents');
         Route::get('/dashboard', [AdminReportController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/laporan', [AdminReportController::class, 'index'])->name('admin.laporan.index');
         Route::post('/laporan/{report}/status', [AdminReportController::class, 'updateStatus'])->name('admin.laporan.updateStatus');

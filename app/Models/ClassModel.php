@@ -9,5 +9,5 @@ class ClassModel extends Model
     protected $table = 'classes'; 
 
     // Kolom yang boleh diisi
-    protected $fillable = ['nama_class']; 
+    protected $fillable = ['nama_class'];
 }
