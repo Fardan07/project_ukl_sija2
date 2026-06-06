@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminLocationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminCategoryController; 
+use App\Http\Controllers\AdminGrafikController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -91,4 +92,6 @@ Route::prefix('admin')
         // Manajemen User Resources & Impor Excel Terintegrasi
         Route::resource('users', UserController::class)->names('admin.users');
         Route::post('/users/import', [UserController::class, 'importExcel'])->name('admin.users.import');
+        
+        Route::get('/admin/grafik', [AdminGrafikController::class, 'index'])->name('admin.grafik.index');
     });
