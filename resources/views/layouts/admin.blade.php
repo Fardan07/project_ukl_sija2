@@ -78,6 +78,7 @@
                 <a href="{{ route('admin.locations.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-red-50 hover:text-red-700 text-gray-600 font-medium whitespace-nowrap transition-colors">📍 Manajemen Lokasi</a>
                 <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-red-50 hover:text-red-700 text-gray-600 font-medium whitespace-nowrap transition-colors">🏷️ Manajemen Kategori</a>
                 <a href="{{ route('admin.users.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-red-50 hover:text-red-700 text-gray-600 font-medium whitespace-nowrap transition-colors">👥 Manajemen User</a>
+                <a href="{{ route('admin.grafik.index') }}" class="block px-4 py-2.5 rounded-xl hover:bg-red-50 hover:text-red-700 text-gray-600 font-medium whitespace-nowrap transition-colors">📊 Statistik Laporan</a>
             </nav>
 
             <div class="p-4 border-t border-gray-100">
