@@ -65,4 +65,39 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect('/login');
     }
+
+    public function apiLogin(Request $request)
+    {
+        // 1. Validasi input dari Postman
+        $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $loginInput = $request->input('username');
+        $password = $request->input('password');
+
+        $user = User::where('name', $loginInput)
+                    ->orWhere('email', $loginInput)
+                    ->first();
+
+        if ($user && \Hash::check($password, $user->password)) {
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Login API Berhasil!',
+        'user' => [
+            'id'    => $user->id,
+            'name'  => $user->name,
+            'email' => $user->email,
+            'role'  => $user->role
+        ]
+    ], 200);
+}
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Username atau Password salah / tidak terdaftar.'
+        ], 401);
+    }
 }
