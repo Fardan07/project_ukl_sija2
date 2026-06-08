@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\Location;
-use App\Models\Category;
+use App\Models\Category; // 🌟 KITA PAKAI INI: Karena data TV, AC ada di sini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,11 +15,12 @@ class ReportController extends Controller
         $this->middleware('auth');
     }
 
-    // Siswa dashboard
+    // Siswa dashboard (Menampilkan Riwayat Histori Laporan)
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
+        // Mengambil data report milik user yang sedang login beserta relasinya
         $reports = Report::with(['facility', 'location'])
             ->where('user_id', $user->id)
             ->latest()
@@ -31,9 +32,11 @@ class ReportController extends Controller
     public function create()
     {
         $locations = Location::orderBy('nama_lokasi')->get();
-        $categories = Category::orderBy('nama_kategori')->get();
+        
+        // 🔄 UBAH: Ambil data dari Category karena admin input AC, TV di menu Kategori Fasilitas
+        $facilities = Category::orderBy('nama_kategori')->get(); 
 
-        return view('laporan.create', compact('locations', 'categories'));
+        return view('landing', compact('locations', 'facilities'));
     }
 
     public function store(Request $request)
@@ -41,28 +44,22 @@ class ReportController extends Controller
         // 1. Validasi Data
         $request->validate([
             'location_id' => 'required|exists:locations,id',
-            'category_id' => 'required|exists:categories,id',
+            'facility_id' => 'required|exists:categories,id', // 🔄 UBAH: Validasi wajib dicek ke tabel categories!
             'deskripsi'   => 'required|string',
             'urgensi'     => 'required|in:normal,darurat',
             'foto'        => 'nullable|image|max:4096',
         ]);
 
-        $user = Auth::user(); // Ambil data user yang login
+        $user = Auth::user(); 
 
         // 2. Mapping & Simpan Data
         $report = new Report();
         $report->location_id = $request->location_id;
-        $report->facility_id = $request->category_id;
+        $report->facility_id = $request->facility_id; // Menyimpan ID kategori ke dalam kolom facility_id
         $report->deskripsi   = $request->deskripsi;
         $report->urgensi     = $request->urgensi;
         $report->user_id     = $user->id;
-        $report->status      = 'belum';
-
-        // OTOMATISASI KELAS
-        // Jika user adalah siswa, ambil class_id dari profil user mereka
-        if ($user->role === 'siswa') {
-            $report->class_id = $user->class_id;
-        }
+        $report->status      = 'belum'; // Status awal antrean baku
 
         // 3. Simpan Foto Jika Ada
         if ($request->hasFile('foto')) {

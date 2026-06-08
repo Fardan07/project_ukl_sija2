@@ -413,24 +413,24 @@
     </div>
 </div>
 
-    <div>
-      <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>
-        Nama Fasilitas
-      </label>
-      <select name="category_id" required
-              class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-red-400">
-        <option value="">Pilih kategori...</option>
+   <div>
+  <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600">
+    Nama Fasilitas
+  </label>
+  <select name="facility_id" required
+          class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-red-400">
+    <option value="">Pilih fasilitas...</option>
 
-        @forelse($categories as $kategori)
-          <option value="{{ $kategori->id }}" {{ old('category_id') == $kategori->id ? 'selected' : '' }}>
-            {{ $kategori->nama_kategori }}
-          </option>
-        @empty
-          <option value="">Belum ada data fasilitas</option>
-        @endforelse
+    @forelse($facilities as $facility)
+      <option value="{{ $facility->id }}" {{ old('facility_id') == $facility->id ? 'selected' : '' }}>
+        {{ $facility->nama_kategori }}
+      </option>
+    @empty
+      <option value="">Belum ada data fasilitas</option>
+    @endforelse
 
-      </select>
-    </div>
+  </select>
+</div>
 
     <div>
       <label class="text-xs font-semibold mb-1.5 block uppercase tracking-wide text-gray-600" required>

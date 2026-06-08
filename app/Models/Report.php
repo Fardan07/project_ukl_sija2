@@ -28,9 +28,9 @@ class Report extends Model
 
     // RELASI DIARAHKAN KE CATEGORY (Tabel Kategori Baru)
     public function facility()
-    {
-        return $this->belongsTo(Category::class, 'facility_id');
-    }
+{
+    return $this->belongsTo(Category::class, 'facility_id');
+}
 
     public function location() 
     {

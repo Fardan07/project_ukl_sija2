@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
+use App\Models\Category; // 🔄 UBAH: Gunakan model Category karena admin input data di sini
 use Illuminate\Http\Request;
-use App\Models\Category; // Memanggil model Kategori yang baru kita buat
-use App\Models\Location; // Asumsi nama model Lokasi kamu adalah Location
 
 class LandingController extends Controller
 {
     public function index()
     {
-        // Mengambil semua data kategori dan lokasi dari database
-        $categories = Category::all();
-        $locations = Location::all(); 
+        $locations = Location::orderBy('nama_lokasi')->get();
+        
+        // 🔄 UBAH: Ambil data dari tabel categories
+        $facilities = Category::orderBy('nama_kategori')->get(); 
 
-        // Mengirim data tersebut ke file landing.blade.php
-        return view('landing', compact('categories', 'locations'));
+        return view('landing', compact('locations', 'facilities'));
     }
 }

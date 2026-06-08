@@ -108,107 +108,140 @@
                 </div>
 
                 <div class="space-y-4">
-                    @forelse ($reports as $report)
-                    <div class="bg-white border border-gray-100 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col sm:flex-row gap-4 md:gap-6 items-start">
-                        
-                        <div class="flex-shrink-0 w-full sm:w-48 h-40 sm:h-32 rounded-xl overflow-hidden bg-gray-100 border border-gray-200 relative cursor-pointer" onclick="openModal('modal-{{ $report->id }}')">
-                            <img src="{{ $report->foto ? asset('storage/'.$report->foto) : asset('img/image.png') }}" class="w-full h-full object-cover">
-                        </div>
+    @forelse ($reports as $report)
+    <div class="bg-white border border-gray-100 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center">
+        
+        <div class="flex-shrink-0 w-full md:w-32 h-32 rounded-xl overflow-hidden bg-gray-100 border border-gray-200 relative cursor-pointer" onclick="openModal('modal-{{ $report->id }}')">
+            <img src="{{ $report->foto ? asset('storage/'.$report->foto) : asset('img/image.png') }}" class="w-full h-full object-cover">
+        </div>
 
-                        <div class="flex-1 w-full">
-                            <div class="flex flex-wrap items-center gap-2 mb-2 md:mb-3">
-                                @if($report->status == 'selesai')
-                                    <span class="px-2 py-1 bg-green-50 text-green-600 border border-green-200 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider">✅ Selesai</span>
-                                @elseif($report->status == 'proses')
-                                    <span class="px-2 py-1 bg-yellow-50 text-yellow-600 border border-yellow-200 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider">⏳ Diproses</span>
-                                @else
-                                    <span class="px-2 py-1 bg-red-50 text-red-600 border border-red-200 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider">🕒 Belum</span>
-                                @endif
-
-                                @if($report->urgensi == 'darurat')
-                                    <span class="px-2 py-1 bg-red-600 text-white rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wider shadow-sm">⚡ Darurat</span>
-                                @endif
-                            </div>
-
-                            <h3 class="text-base md:text-lg font-bold text-gray-800 mb-2 leading-tight">{{ \Illuminate\Support\Str::limit($report->deskripsi, 60) }}</h3>
-
-                            <div class="flex flex-wrap items-center gap-x-3 md:gap-x-4 gap-y-1 md:gap-y-2 text-xs md:text-sm text-gray-500 mb-4">
-                                <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>{{ $report->facility->nama_kategori ?? $report->facility->nama_fasilitas ?? '-' }}</span>
-                                <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>{{ $report->location->nama_lokasi ?? '-' }}</span>
-                            </div>
-
-                            <button onclick="openModal('modal-{{ $report->id }}')" class="w-full sm:w-auto text-center inline-flex justify-center items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors bg-blue-50 sm:bg-transparent py-2 rounded-lg sm:py-0">
-                                Lihat Detail
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="modal-{{ $report->id }}" class="fixed inset-0 z-[99999] flex items-center justify-center hidden opacity-0 transition-opacity duration-300 p-4">
-                        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('modal-{{ $report->id }}')"></div>
-                        <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl transform scale-95 transition-transform duration-300" id="content-{{ $report->id }}">
-                            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-20">
-                                <div>
-                                    <h3 class="font-heading text-lg md:text-xl font-bold text-gray-800">Detail Laporan</h3>
-                                    <p class="text-[10px] md:text-xs text-gray-400 mt-1">Dilaporkan pada {{ $report->created_at->format('d F Y, H:i') }}</p>
-                                </div>
-                                <button onclick="closeModal('modal-{{ $report->id }}')" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-red-100 text-gray-600 flex items-center justify-center">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
-                            </div>
-
-                            <div class="p-4 md:p-6">
-                                @if($report->foto)
-                                    <img src="{{ asset('storage/'.$report->foto) }}" class="w-full max-h-48 md:max-h-80 object-contain bg-gray-100 rounded-xl mb-6">
-                                @endif
-                                
-                                <div class="grid grid-cols-2 gap-2 md:gap-4 mb-6">
-                                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <p class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Status</p>
-                                        <p class="font-bold text-xs md:text-sm capitalize">{{ $report->status }}</p>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <p class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Urgensi</p>
-                                        <p class="font-bold text-xs md:text-sm {{ $report->urgensi == 'darurat' ? 'text-red-600' : 'text-gray-800' }} capitalize">{{ $report->urgensi }}</p>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <p class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Fasilitas</p>
-                                        <p class="font-bold text-xs md:text-sm">{{ $report->facility->nama_kategori ?? $report->facility->nama_fasilitas ?? '-' }}</p>
-                                    </div>
-                                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
-                                        <p class="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Lokasi</p>
-                                        <p class="font-bold text-xs md:text-sm">{{ $report->location->nama_lokasi ?? '-' }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="mb-6">
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Deskripsi Kerusakan</p>
-                                    <p class="text-xs md:text-sm text-gray-700 bg-gray-50 p-4 rounded-xl border border-gray-100">{{ $report->deskripsi }}</p>
-                                </div>
-
-                                @if($report->catatan_admin || $report->foto_perbaikan)
-                                <div class="mt-6 border-t border-gray-100 pt-6">
-                                    <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider mb-3">Tanggapan Admin</p>
-                                    <div class="bg-blue-50 p-4 md:p-5 rounded-xl border border-blue-100">
-                                        @if($report->catatan_admin)
-                                            <p class="text-xs md:text-sm text-blue-800">{{ $report->catatan_admin }}</p>
-                                        @endif
-                                        @if($report->foto_perbaikan)
-                                            <img src="{{ asset('storage/'.$report->foto_perbaikan) }}" class="mt-4 w-full max-h-48 object-cover rounded-lg border border-blue-200">
-                                        @endif
-                                    </div>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    @empty
-                    <div class="bg-white border border-gray-100 rounded-2xl p-8 text-center">
-                        <p class="text-gray-500 text-sm">Belum ada laporan.</p>
-                    </div>
-                    @endforelse
+        <div class="flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                
+                <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">Status</p>
+                    @if($report->status === 'selesai')
+                        <span class="text-xs font-bold text-green-600">✅ Selesai</span>
+                    @elseif($report->status === 'proses')
+                        <span class="text-xs font-bold text-blue-600">⏳ Diproses</span>
+                    @else
+                        <span class="text-xs font-bold text-yellow-600">🕒 Antrean</span>
+                    @endif
                 </div>
+
+                <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">Urgensi</p>
+                    <span class="text-xs font-bold {{ $report->urgensi == 'darurat' ? 'text-red-600' : 'text-gray-700' }} capitalize">
+                        {{ $report->urgensi }}
+                    </span>
+                </div>
+
+                <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">Fasilitas</p>
+                    <span class="text-xs font-bold text-gray-800 truncate block">
+                        {{ $report->facility->nama_kategori ?? '-' }}
+                    </span>
+                </div>
+
+                <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mb-0.5">Lokasi</p>
+                    <span class="text-xs font-bold text-gray-800 truncate block">
+                        {{ $report->location->nama_lokasi ?? '-' }}
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between items-center border-t border-gray-50 pt-3">
+                <span class="text-[11px] text-gray-400">Dibuat: {{ $report->created_at->diffForHumans() }}</span>
+                <button onclick="openModal('modal-{{ $report->id }}')" class="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                    Lihat Detail Laporan
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-{{ $report->id }}" class="fixed inset-0 z-[99999] flex items-center justify-center hidden opacity-0 transition-opacity duration-300 p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('modal-{{ $report->id }}')"></div>
+        <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl transform scale-95 transition-transform duration-300" id="content-{{ $report->id }}">
+            
+            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-100 sticky top-0 bg-white z-20">
+                <div>
+                    <h3 class="font-heading text-lg md:text-xl font-bold text-gray-800">Detail Laporan</h3>
+                    <p class="text-[10px] md:text-xs text-gray-400 mt-1">Dilaporkan pada {{ $report->created_at->format('d F Y, H:i') }}</p>
+                </div>
+                <button onclick="closeModal('modal-{{ $report->id }}')" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-red-100 text-gray-600 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="p-4 md:p-6">
+                @if($report->foto)
+                    <img src="{{ asset('storage/'.$report->foto) }}" class="w-full max-h-48 md:max-h-80 object-contain bg-gray-100 rounded-xl mb-6">
+                @endif
+                
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Status Laporan</p>
+                        <p class="font-bold text-xs md:text-sm capitalize">
+                            {{ $report->status == 'proses' ? 'Sedang Diproses' : ($report->status == 'selesai' ? 'Selesai' : 'Menunggu Antrean') }}
+                        </p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Urgensi</p>
+                        <p class="font-bold text-xs md:text-sm {{ $report->urgensi == 'darurat' ? 'text-red-600' : 'text-gray-800' }} capitalize">{{ $report->urgensi }}</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Fasilitas</p>
+                        <p class="font-bold text-xs md:text-sm">{{ $report->facility->nama_kategori ?? '-' }}</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100">
+                        <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Lokasi Ruangan</p>
+                        <p class="font-bold text-xs md:text-sm">{{ $report->location->nama_lokasi ?? '-' }}</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Deskripsi Kerusakan dari Kamu</p>
+                    <p class="text-xs md:text-sm text-gray-700 bg-gray-50 p-4 rounded-xl border border-gray-100">{{ $report->deskripsi }}</p>
+                </div>
+
+                @if($report->catatan_admin || $report->foto_perbaikan || $report->status !== 'belum')
+                <div class="mt-6 border-t border-gray-100 pt-6">
+                    <p class="text-[10px] text-blue-600 font-bold uppercase tracking-wider mb-3">Tanggapan & Progres Admin Sarpras</p>
+                    <div class="bg-blue-50/70 p-4 md:p-5 rounded-xl border border-blue-100">
+                        <p class="text-xs font-semibold text-blue-900 mb-2">
+                            Status Terkini: <span class="underline capitalize">{{ $report->status == 'proses' ? 'Sedang Dikerjakan tim Sarpras' : ($report->status == 'selesai' ? 'Sudah Diperbaiki' : 'Laporan Diterima') }}</span>
+                        </p>
+                        
+                        @if($report->catatan_admin)
+                            <div class="text-xs md:text-sm text-blue-800 bg-white/80 p-3 rounded-lg border border-blue-200/50 italic">
+                                "{{ $report->catatan_admin }}"
+                            </div>
+                        @else
+                            <p class="text-xs text-blue-700/60 italic">Belum ada catatan tertulis dari admin.</p>
+                        @endif
+
+                        @if($report->foto_perbaikan)
+                            <div class="mt-4">
+                                <p class="text-[10px] text-blue-700 font-bold uppercase mb-1.5">Foto Bukti Perbaikan Selesai:</p>
+                                <img src="{{ asset('storage/'.$report->foto_perbaikan) }}" class="w-full max-h-48 object-cover rounded-lg border border-blue-200 shadow-xs">
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    @empty
+    <div class="bg-white border border-gray-100 rounded-2xl p-8 text-center">
+        <p class="text-gray-500 text-sm">Belum ada riwayat laporan yang kamu kirimkan.</p>
+    </div>
+    @endforelse
+</div>
                 
                 @if($reports->hasPages())
                 <div class="mt-8">{{ $reports->links() }}</div>
