@@ -261,11 +261,11 @@
     </div>
 
     <div class="flex items-center justify-between">
-      <label class="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" name="remember" class="w-4 h-4 rounded" style="accent-color:#B91C1C">
-        <span class="text-xs text-gray-500">Ingat saya</span>
-      </label>
-    </div>
+  <label class="flex items-center space-x-2 cursor-pointer select-none">
+    <input type="checkbox" name="remember" id="remember" class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+    <span class="text-xs text-gray-500">Ingat saya</span>
+  </label>
+</div>
 
     <button type="submit" class="btn-red mt-2">Login</button>
 
