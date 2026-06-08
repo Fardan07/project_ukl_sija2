@@ -11,8 +11,6 @@
     <div class="flex items-center gap-3">
         <select class="px-3 py-2 border border-gray-200 rounded-lg text-sm">
             <option>2026</option>
-            <option>2025</option>
-            <option>2024</option>
         </select>
 
         <a href="{{ route('admin.dashboard') }}"
@@ -37,19 +35,23 @@
         <h2 class="text-4xl font-bold text-gray-800 mt-2">
                 {{ $laporanBulanIni }}
         </h2>
-        <p class="text-xs text-green-500 mt-2">▲ 13.3% dari bulan lalu</p>
+        <p class="text-xs text-green-500 mt-2">Total laporan bulan ini</p>
     </div>
 
     <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <p class="text-sm text-gray-500">Laporan Selesai</p>
-        <h2 class="text-4xl font-bold text-gray-800 mt-2">95</h2>
-        <p class="text-xs text-green-500 mt-2">74.2% dari total laporan</p>
+        <h2 class="text-4xl font-bold text-gray-800 mt-2">
+                {{ $laporanSelesai }}
+        </h2>
+        <p class="text-xs text-green-500 mt-2">Laporan selesai ditangani</p>
     </div>
 
     <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
         <p class="text-sm text-gray-500">Laporan Diproses</p>
-        <h2 class="text-4xl font-bold text-gray-800 mt-2">33</h2>
-        <p class="text-xs text-orange-500 mt-2">25.8% dari total laporan</p>
+        <h2 class="text-4xl font-bold text-gray-800 mt-2">
+            {{ $laporanDiproses }}
+        </h2>
+        <p class="text-xs text-orange-500 mt-2">Sedang dalam perbaikan</p>
     </div>
 
 </div>
@@ -81,24 +83,19 @@
         <div class="mt-5 space-y-2 text-sm">
             <div class="flex justify-between">
                 <span>Selesai</span>
-                <span>95 (74.2%)</span>
+                <span>{{ $laporanSelesai }} ({{ $persenSelesai }}%)</span>
             </div>
 
             <div class="flex justify-between">
                 <span>Diproses</span>
-                <span>33 (25.8%)</span>
-            </div>
-
-            <div class="flex justify-between">
-                <span>Ditolak</span>
-                <span>0 (0%)</span>
+                <span>{{ $laporanDiproses }} ({{ $persenDiproses }}%)</span>
             </div>
 
             <hr class="my-2">
 
             <div class="flex justify-between font-semibold">
                 <span>Total</span>
-                <span>128</span>
+                <span>{{ $totalLaporan }}</span>
             </div>
         </div>
     </div>
@@ -113,71 +110,27 @@
         </h3>
 
         <div class="space-y-4">
-
+        @forelse($topKategori as $item)
+            @php
+                $persenLebar = ($item->total / $maksimalLaporan) * 100;
+            @endphp
             <div>
                 <div class="flex justify-between text-sm mb-1">
-                    <span>Meja Rusak</span>
-                    <span>35</span>
+                    <span>{{ $item->category->name ?? 'Kategori Terhapus' }}</span>
+                    <span>{{ $item->total }}</span>
                 </div>
                 <div class="h-2 bg-gray-100 rounded-full">
-                    <div class="h-2 bg-red-500 rounded-full w-[100%]"></div>
+                    <div class="h-2 bg-red-500 rounded-full" style="width: {{ $persenLebar }}%"></div>
                 </div>
             </div>
-
-            <div>
-                <div class="flex justify-between text-sm mb-1">
-                    <span>Kursi Rusak</span>
-                    <span>28</span>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full">
-                    <div class="h-2 bg-red-500 rounded-full w-[80%]"></div>
-                </div>
+        @empty
+            <div class="text-gray-400 text-center py-4 text-sm">
+                Belum ada data laporan kerusakan.
             </div>
-
-            <div>
-                <div class="flex justify-between text-sm mb-1">
-                    <span>Lampu Mati</span>
-                    <span>21</span>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full">
-                    <div class="h-2 bg-red-500 rounded-full w-[60%]"></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="flex justify-between text-sm mb-1">
-                    <span>Pintu Rusak</span>
-                    <span>15</span>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full">
-                    <div class="h-2 bg-red-500 rounded-full w-[40%]"></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="flex justify-between text-sm mb-1">
-                    <span>AC Rusak</span>
-                    <span>10</span>
-                </div>
-                <div class="h-2 bg-gray-100 rounded-full">
-                    <div class="h-2 bg-red-500 rounded-full w-[30%]"></div>
-                </div>
-            </div>
-
+        @endforelse
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-        <h3 class="font-semibold text-gray-800 mb-4">Informasi</h3>
-
-        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
-            <p class="text-sm text-gray-700">
-                Data statistik diperbarui otomatis setiap hari.
-            </p>
-
-            <p class="text-xs text-gray-500 mt-2">
-                Terakhir diperbarui: 6 Juni 2026, 10:51 WIB
-            </p>
         </div>
     </div>
 
@@ -193,7 +146,7 @@ new Chart(laporanCtx, {
     data: {
         labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
         datasets: [{
-            data: [12,20,15,24,13,18,9,16,14,22,17,16],
+            data: @json($dataBulananFix),
             backgroundColor: '#3B82F6',
             borderRadius: 6
         }]
@@ -202,6 +155,15 @@ new Chart(laporanCtx, {
         plugins: {
             legend: {
                 display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                    precision: 0
+                }
             }
         }
     }
@@ -214,7 +176,7 @@ new Chart(statusCtx, {
     data: {
         labels: ['Selesai','Diproses'],
         datasets: [{
-            data: [95,33],
+            data: [{{ $laporanSelesai }}, {{ $laporanDiproses }}],
             backgroundColor: [
                 '#22C55E',
                 '#F97316'
