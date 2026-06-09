@@ -130,17 +130,26 @@
     @csrf
     @method('PUT')
     
-    <select name="position_id" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition cursor-pointer" required>
-        <!-- Placeholder "-" -->
-        <option value="" disabled {{ is_null($user->position_id) ? 'selected' : '' }}>-</option>
+   <select name="position_id" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition cursor-pointer" required>
+    <option value="" disabled {{ empty($user->position_id) ? 'selected' : '' }}>-</option>
+    
+    @foreach($positions as $p)
+        @php
+            // Logika cerdas: Kita cek apakah id cocok (angka 2) ATAU string nama jabatannya yang mirip ("USER"/"Siswa")
+            $is_selected = false;
+            
+            if ($user->position_id == $p->id) {
+                $is_selected = true;
+            } elseif (strtoupper(trim($user->position_id)) === strtoupper(trim($p->nama_jabatan))) {
+                $is_selected = true;
+            }
+        @endphp
         
-        <!-- Daftar Jabatan -->
-        @foreach($positions as $p)
-            <option value="{{ $p->id }}" {{ $user->position_id == $p->id ? 'selected' : '' }}>
-                {{ $p->nama_jabatan }}
-            </option>
-        @endforeach
-    </select>
+        <option value="{{ $p->id }}" {{ $is_selected ? 'selected' : '' }}>
+            {{ $p->nama_jabatan }}
+        </option>
+    @endforeach
+</select>
 
     <!-- Error message jika user tidak memilih role -->
     @error('position_id')
